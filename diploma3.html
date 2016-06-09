@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>менятель элементов</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style type="text/css">
+        @import "./css/bootstrap.css";
+
+        .device-ios, .device-android {
+            margin: 10px;
+            float: left;
+        }
+
+        .device-ios {
+            width: 320px !important;
+            height: 548px !important;
+            background: #111;
+            border-radius: 55px;
+            box-shadow: 0px 0px 0px 2px #aaa;
+            padding: 105px 20px;
+            position: relative;
+        }
+
+        .device-ios:before {
+            content: '';
+            width: 60px;
+            height: 10px;
+            border-radius: 10px;
+            position: absolute;
+            left: 50%;
+            margin-left: -30px;
+            background: #333;
+            top: 50px;
+        }
+
+        .device-ios:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            margin-left: -30px;
+            bottom: 20px;
+            border-radius: 100%;
+            box-sizing: border-box;
+            border: 5px solid #333;
+        }
+
+        .device-android {
+            width: 360px !important;
+            height: 640px !important;
+            position: relative;
+            background: #111;
+            padding: 60px 20px;
+            box-shadow: 0px 0px 0px 2px #aaa;
+            border-radius: 20px;
+        }
+
+        .device-android span.back-span {
+            display: none;
+        }
+
+        .device-android:before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            margin-left: -7px;
+            background: #666;
+            top: 25px;
+        }
+
+        .device-android:after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            left: 50px;
+            background: #444;
+            top: 30px;
+        }
+        
+        #phone .navbar-through .page-content{
+            padding-top: 35px;
+        }
+        
+        .center:not(.sliding){
+            height:44px;
+            line-height:44px;
+            text-align:center;
+        }
+        div.row{
+            justify-content: flex-start;
+            align-items: stretch;
+        }
+    </style>
+</head>
+<body style="overflow:auto;background:linear-gradient(to top, #fe521e, #D41E88);">
+<div class="row">
+    <div style="min-width:33%; max-width:370px; width:33%;">
+        <div id="phone" class="device device-ios">
+            <div class="views">
+                <div class="pages navbar-through">
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <div class="left sliding"><a href="" class="back link"><i
+                                    class="icon icon-back"></i><span class="back-span">Back</span></a></div>
+                            <div class="center sliding">Cards</div>
+                            <div class="right"><a href="" class="link open-panel icon-only"><i class="icon icon-bars"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <div id="current_page" class="view view-main page-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="min-width:30%; max-width:63%; padding:20px; width:100%">
+        <div class="bs-panel bs-panel-default col-100">
+            <div class="bs-panel-heading">
+                <h3 class="bs-panel-title">Страница</h3>
+            </div>
+            <div class="row bs-panel-body form-group">
+                <div class="col-66">
+                    <select class="form-control col-100" id="current_page_select"></select>
+                </div>
+                <div class="col-33" style="padding: 5px;">
+                    <a href="#" class="btn btn-default" onclick="release_to_ios()">iOS style</a>
+                    <a href="#" class="btn btn-default" onclick="release_to_material()">Android style</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bs-panel bs-panel-default col-100">
+            <div class="bs-panel-heading">
+                <h3 class="bs-panel-title">Элементы</h3>
+            </div>
+            <div class="row bs-panel-body">
+                <div class="col-20 center">Контейнер</div>
+                <div class="col-30 form-group">
+                    <select class="form-control col-100" id="current_container_select"></select>
+                </div>
+                <div class="col-20 center">Элемент</div>
+                <div class="col-30 form-group">
+                    <select class="form-control col-100" id="current_element_select"></select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bs-panel bs-panel-default col-100">
+            <div class="bs-panel-heading">
+                <h3 class="bs-panel-title">Параметры</h3>
+            </div>
+            <div id="field_panel" class="row bs-panel-body"></div>
+        </div>
+
+        <div class="col-33" style=" padding:30px 10px">
+            <a href="#" class="btn btn-default">Сохранить проект</a>
+            <a href="#" class="btn btn-default">Сохранить png</a>
+        </div>
+
+        <div class="bs-panel bs-panel-default col-100" style="margin-top:60px">
+            <div class="bs-panel-heading">
+                <h3 class="bs-panel-title">Разметка макета</h3>
+            </div>
+            <div class="row bs-panel-body">
+                <textarea cols="100" rows="10" id="model_textarea"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./Framework7/build/js/framework7.min.js"></script>
+<script type="text/javascript">
+
+
+    function release_to_ios() {
+        Dom7('#phone').removeClass('device-android').addClass('device-ios');
+        Dom7('head .linkcss').remove();
+        Dom7('head').append(
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.ios.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.ios.colors.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/kitchen-sink-ios/css/kitchen-sink.css">'
+        );
+    }
+
+    function release_to_material() {
+        Dom7('#phone').removeClass('device-ios').addClass('device-android');
+        Dom7('head .linkcss').remove();
+        Dom7('head').append(
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.material.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.material.colors.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/kitchen-sink-material/css/kitchen-sink.css">'
+        );
+    }
+    release_to_ios();
+    </script>
+    <script type="text/javascript">
+    'use strict';
+    //обновить представление по измененным параметрам
+    
+    var current = {
+        _page: 0,
+        _container: 0,
+        _element: 0,
+        add_element: function(type, container_type){
+            var el = add_page_element(this._page, this._container, type, container_type);
+            this.page = this._page;
+            current_element_select.selectedIndex = el - 1;
+            this.element = el;
+        }
+    }
+    
+    Dom7(current_container_select).change(function(e){
+        current.container = this.value>>0;
+    });
+    
+    Dom7(current_element_select).change(function(e){
+        current.element = this.value>>0;
+    });
+    
+    Dom7(current_page_select).change(function(e){
+        current.page = this.value>>0;
+    });
+    
+    // being explicit
+    Object.defineProperties(current, {
+        'page': {
+            enumerable: true,
+            configurable: false,
+            get: function(){ return app.pages[this._page]; },
+            set: function(value){
+                this._page = value; //меняем страницу
+                
+                Dom7(current_page_select).html('');
+                app.pages.forEach(function(page, index){
+                var option = Dom7(current_page_select).append('<option></option>').children().eq(-1);
+                    option.attr('value', index).text('Страница ' + index);
+                });
+                var option = Dom7(current_page_select).append('<option></option>').children().eq(-1);
+                option.attr('value', option[0].index).text('<добавить новую страницу>');
+                current_page_select.selectedIndex = value;
+                
+                Dom7(current_page).html(''); //очищаем макет
+                Dom7(current_container_select).html(''); //очищаем список контейнеров
+                Dom7(current_element_select).html(''); //очищаем список элементов
+                if(!!app.pages[this._page]){ //если есть контейнеры, вывести их список
+                    app.pages[this._page].forEach(function(container, num){
+                        var option = Dom7(current_container_select).append('<option></option>').children().eq(-1);
+                        option.attr('value', num).text(num + ': ' + container[0].type);
+                        app.pages[current._page][num].forEach(function(element, index){
+                            if(!index) return;
+                            var container_obj = Dom7(current_page).children().eq(num).children().eq(1);
+                            if(!container_obj[0]){ //если контейнера нет, то отрисовать его прежде
+                                container_obj = Dom7(current_page).append(types[container[0].type][container[0].type].get_view()).children().eq(-1).children().eq(1);
+                            }
+                            container_obj.append(types[element.type][element.type].get_view());
+                            Object.keys(types[element.type]).forEach(function(param){
+                                if(param != element.type){
+                                    if(!element[param]) element[param] = types[element.type][param].default;
+                                    try {
+                                        types[element.type][param].update(param, 'update', element, Dom7(current_page).children().eq(element.index[1]).children().eq(1).children().eq(element.index[2] - 1), element[param]);
+                                    } catch(e) {
+                                        
+                                    }
+                                }
+                            });
+                        });
+                    });
+                }
+                //вставляем добавить новый контейнер
+                var option = Dom7(current_container_select).append('<option></option>').children().eq(-1);
+                option.attr('value', option[0].index).text('<добавить новый контейнер>');
+                this.container = 0;
+            }
+        }, 'container': {
+            enumerable: true,
+            configurable: false,
+            get: function(){ return app.pages[this._page][this._container]; },
+            set: function(value){
+                this._container = value; //меняем контейнер
+                Dom7(current_element_select).html(''); //очищаем список элементов
+                if(!!app.pages[this._page] && !!app.pages[this._page][this._container]){
+                    app.pages[current._page][current._container].forEach(function(element, index){
+                        if(!index) return;
+                        var option = Dom7(current_element_select).append('<option></option>').children().eq(-1);
+                        option.attr('value', index).text(index + ': ' + element.type);
+                    });
+                }
+                var option = Dom7(current_element_select).append('<option></option>').children().eq(-1);
+                option.attr('value', option[0].index + 1).text('<добавить новый элемент>');
+                this.element = 1;
+                
+            }
+        }, 'element': {
+            enumerable: true,
+            configurable: false,
+            get: function(){ return app.pages[this._page][this._container][this._element]; },
+            set: function(value){
+                this._element = value;
+                Dom7(field_panel).html(''); //очищаем список полей
+                if(!!app.pages[this._page]){
+                    if(!!app.pages[this._page][this._container]){
+                        //вывести список параметов контейнера
+                        out_element_param_fields(app.pages[this._page][this._container][0]);
+                        Dom7(field_panel).append('<hr class="col-100" />');
+                        if(!!app.pages[this._page][this._container][this._element]){
+                            out_element_param_fields(app.pages[this._page][this._container][this._element]);
+                        } else {
+                            out_new_element_param_fields(false, true);
+                        }
+                    } else {
+                        //вывести список всех контенерных типов
+                        out_new_element_param_fields(true, true);
+                    }
+                } else {
+                    out_new_element_param_fields(true, true);
+                }
+            }
+        }
+    });
+    
+    function add_page_element(page, container, type, container_type){
+        var index, model = {type: type}; //вставляемый элемент
+        if(app.pages.length <= page){ //при необходимости вставляем страницу
+            app.pages.push([]);
+        }
+        if(app.pages[page].length <= container){ //при необходимости вставляем контейнер
+            if(!container_type) container_type = 'background';
+            var container_model = [{type:container_type}];
+            app.pages[page].push(container_model);
+            Object.keys(types[container_type]).forEach(function(param){
+                //установка в модели значения по умолчанию
+                if(param != container_type) container_model[0][param] = types[container_type][param].default;
+            });
+        }
+        index = app.pages[page][container].length; //индекс вставляемого элемента
+        app.pages[page][container].push(model); //вставка элемента в модель
+        model.index = [page, container, index]; //в элементе его координаты
+        Object.keys(types[type]).forEach(function(param){
+            //установка в модели значения по умолчанию
+            if(param != type) model[param] = types[type][param].default;
+        });
+        model_textarea.value = JSON.stringify(app, "", 2);
+        return index;
+    }
+    
+    function change_class(view, class_name, is_add){
+        if(view.hasClass(class_name) && !is_add) view.removeClass(class_name);
+        else if(!view.hasClass(class_name) && !!is_add) view.addClass(class_name);
+    }
+    
+    function out_element_param_fields(model){
+        Object.keys(types[model.type]).forEach(function(param){
+            var p, label, input, param_obj;
+            param_obj = types[model.type][param];
+            if(param != model.type){
+                p = Dom7(field_panel);
+                
+                //подпись
+                label = p.append('<div class="col-20 center"></div>').children().eq(-1);
+                label.text(param_obj.field_label);
+                
+                if(param_obj.field_type == 'input'){ //поле ввода текста
+                    input = p.append('<div class="col-30"></div>').children().eq(-1).append('<input type="text" class="form-control" />').children().eq(-1);
+                    input.prop('value', model[param]);
+                } else if(param_obj.field_type == 'checkbox'){ //чекбокс
+                    input = p.append('<div class="col-30 center"></div>').children().eq(-1).append('<input type="checkbox" />').children().eq(-1);
+                    input.prop('checked', !!model[param]);
+                } else if(param_obj.field_type == 'select'){ //селект
+                    input = p.append('<div class="col-30"></div>').children().eq(-1).append('<select class="form-control col-100"></select>').children().eq(-1);
+                    if(param_obj.field_options instanceof Array)
+                        param_obj.field_options.forEach(function(option){
+                        var optgroup = input, optlabel = option.substring(0, 9);
+                        if(optlabel == 'optgroup-'){
+                            optgroup = input.append('<optgroup></optgroup>').children().eq(-1);
+                            optlabel = option.substring(9);
+                            optgroup.attr('label', optlabel);
+                        } else {
+                            optgroup.append('<option></option>').children().eq(-1).text(option);
+                        }
+                        
+                    });
+                    input.prop('value', model[param]);
+                }
+                
+                input.change(change_parameter.bind(input[0], model, param));
+                
+            }
+        });
+    }
+    
+    function out_new_element_param_fields(is_container, is_element){
+        var option, select, add;
+        for(var i = 0, select = []; i < 2; i++){
+            if(!is_container && (i == 0) || !is_element && (i == 1)) continue;
+            select[i] = Dom7(field_panel)
+                .append('<div class="col-20 center">' + (i == 0 ? 'Контейнер' : 'Элемент')+ '</div>')
+                .append('<div class="col-30 form-group"></div>').children().eq(-1)
+                .append('<select class="form-control col-100"></select>').children().eq(-1);
+            Object.keys(types).forEach(function(type){
+                if(types[type][type].is_container == (i != 0)) return false;
+                option = select[i].append('<option></option>').children().eq(-1);
+                option.text(type);
+            });
+        }
+        add = Dom7(field_panel).append('<div class="col-100" style="text-align:right;"></div>').children().eq(-1).append('<button type="button" class="btn btn-default"></button>').children().eq(-1);
+        add.text('Добавить').click(function(e){
+            if(!!select[0]){
+                current.add_element(select[1][0].value, select[0][0].value);
+            } else {
+                current.add_element(select[1][0].value, null);
+            }
+        });
+    }
+    
+    function change_parameter(model, param, e){
+        var view, old = model[param];
+        if(this.type == 'text') model[param] = this.value;
+        else if(this.type == 'checkbox') model[param] = this.checked;
+        else if(this.type == 'select-one') model[param] = this.value;
+        
+        if(types[model.type][model.type].is_container){
+            view = Dom7(current_page).children().eq(current._container);
+            console.log(model);
+        } else {
+            view = Dom7(current_page).children().eq(model.index[1]).children().eq(1).children().eq(model.index[2] - 1);
+        }
+        
+        types[model.type][param].update(param, 'update', model, view, old);
+        model_textarea.value = JSON.stringify(app, "", 2);
+    }
+    
+    var types = {
+        contentblock:{
+            'contentblock': {
+                is_container: true,
+                get_view: function(){
+                    return '<div class="content-block"><div class="content-block-title" style="display:none;"></div><div></div></div>';
+                }
+            },
+            'title': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(0)
+                    .css('display', (model[name] == '' ? 'none' : ''))
+                    .text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Заголовок',
+                field_options: null
+            }
+        },
+        buttonrow:{
+            'buttonrow': {
+                is_container: true,
+                get_view: function(){
+                    return '<div class="content-block"><div class="content-block-title" style="display:none;"></div><div class="buttons-row"></div></div>';
+                }
+            },
+            'title': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(0)
+                    .css('display', (model[name] == '' ? 'none' : ''))
+                    .text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Заголовок',
+                field_options: null
+            }
+        },
+        listview:{
+            'listview': {
+                is_container: true,
+                get_view: function(){
+                    return '<div class="list-block"><div class="content-block-title" style="display:none;"></div><ul></ul></div>';
+                }
+            },
+            'title': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(0)
+                    .css('display', (model[name] == '' ? 'none' : ''))
+                    .text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Заголовок',
+                field_options: null
+            },
+            'inset': {
+                default: false,
+                update: function(name, type, model, view, old){
+                    console.log(view);
+                    change_class(view, 'inset', model[name]);
+                },
+                field_type: 'checkbox',
+                field_label: 'Закругленный',
+                field_options: null
+            }
+        },
+        accordion :{
+            'accordion': {
+                is_container: true,
+                get_view: function(){
+                    return '<div class="list-block accordion-list"><div class="content-block-title" style="display:none;"></div><ul></ul></div>';
+                }
+            },
+            'title': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(0)
+                    .css('display', (model[name] == '' ? 'none' : ''))
+                    .text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Заголовок',
+                field_options: null
+            },
+            'inset': {
+                default: false,
+                update: function(name, type, model, view, old){
+                    console.log(view);
+                    change_class(view, 'inset', model[name]);
+                },
+                field_type: 'checkbox',
+                field_label: 'Закругленный',
+                field_options: null
+            }
+        },
+        text: {
+            'text': {
+                is_container: false,
+                get_view: function(){
+                    return '<p></p>';
+                }
+            },
+            'content': {
+                //значение по умолчанию
+                default: '',
+                //функция обновления элемента DOM в представлении-макете
+                update: function(name, type, model, view, old){
+                    view.text(model[name] || '');
+                },
+                //функция создания параметра в представлении параметров
+                field: function(model, param){
+                    var input = Dom7(field_panel).append('<p></p>')
+                    .children().eq(-1)
+                    .append('<label>Содержимое</label>')
+                    .append('<input type="text" />')
+                    .children().eq(-1);
+                    
+                    input.change(change_parameter.bind(input[0], model, param));
+                },
+                field_type: 'input',
+                field_label: 'Содержимое',
+                field_options: null
+            }
+        },
+        listitem: {
+            'listitem': {
+                is_container: false,
+                get_view: function(){
+                    return '<li><div class="item-content"><div class="item-media"><i class="icon icon-f7"></i></div><div class="item-inner"><div class="item-title"></div><div class="item-after"></div></div></div></li>';
+                }
+            },
+            'icon':{
+                default: '',
+                update: function(name, type, model, view, old){
+                    view = view.children().eq(0).children().eq(0).children().eq(0);
+                    change_class(view, 'icon', model[name] != '');
+                    change_class(view, 'icon-' + old, false);
+                    if(model[name] != '') change_class(view, 'icon-' + model[name], true);
+                },
+                field_type: 'select',
+                field_label: 'Иконка',
+                field_options: ['', 'f7', 'form-name', 'form-password', 'form-email', 'form-calendar', 'form-tel', 'form-gender', 'form-toggle', 'form-comment', 'form-settings', 'form-url']
+            },
+            'link':{
+                default: '',
+                update: function(name, type, model, view, old){
+                    var h = view.children().html();
+                    view.html('');
+                    view.append((model[name] != '' ? '<a href="#" class="item-link"></a>' : '<div></div>'))
+                    .children().eq(-1).addClass('item-content').html(h);
+                },
+                field_type: 'checkbox',
+                field_label: 'Ссылка',
+                field_options: null
+            },
+            'infotype':{
+                default: '',
+                update: function(name, type, model, view, old){
+                    view = view.children().eq(0).children().eq(1);
+                    view.children().eq(1).remove();
+                    
+                    if(model['info'] != ''){
+                        view = view.append('<div class="item-after"></div>').children().eq(-1);
+                        if(model[name] == 'badge'){
+                            view
+                            .append('<span></span>').children().eq(-1)
+                            .addClass('badge').text(model['info'] || '');
+                        } else if(model[name] == 'switch'){
+                            view
+                            .append('<label class="label-switch"><input type="checkbox"><div class="checkbox"></div></label>')
+                            .children().eq(0).children().eq(0).prop('checked', !!model['info']);
+                        } else {
+                            view.text(model['info'] || '');
+                        }
+                    }
+                },
+                field_type: 'select',
+                field_label: 'Тип инфо',
+                field_options: ['', 'text', 'badge', 'switch']
+            },
+            'info':{
+                default: '',
+                update: function(name, type, model, view, old){
+                    view = view.children().eq(0).children().eq(1);
+                    view.children().eq(1).remove();
+                    
+                    if(model[name] != ''){
+                        view = view.append('<div class="item-after"></div>').children().eq(-1);
+                        if(model['infotype'] == 'badge'){
+                            view.html('')
+                            .append('<span></span>').children().eq(-1)
+                            .addClass('badge').text(model[name] || '');
+                        } else if(model['infotype'] == 'switch'){
+                            view.html('')
+                            .append('<label class="label-switch"><input type="checkbox"><div class="checkbox"></div></label>')
+                            .children().eq(0).children().eq(0).prop('checked', !!model[name]);
+                        } else {
+                            view.text(model[name] || '');
+                        }
+                    }
+                },
+                field_type: 'input',
+                field_label: 'Инфо',
+                field_options: null
+            },
+            'text': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(0).children().eq(1).children().eq(0).text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Текст',
+                field_options: null
+            },
+            'input': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view = view.children().eq(0).children().eq(1);
+                    change_class(view.children().eq(0), 'label', model[name] != '');
+                    view.children().eq(1).remove();
+                    
+                    if(model[name] != ''){
+                        view = view.append('<div class="item-input">').children().eq(-1);
+                        if(model[name] == 'checkbox'){
+                            view.append('<label class="label-switch"><input type="checkbox" /><div class="checkbox"></div></label>');
+                        } else if(model[name] == 'slider'){
+                            view.append('<div class="range-slider"><input type="range" min="0" max="100" value="50" step="1" /></div>');
+                        } else {
+                            view.append('<input type="' + model[name] + '" />');
+                        }
+                    }
+                },
+                field_type: 'select',
+                field_label: 'Элемент формы',
+                field_options: ['', 'text', 'email', 'url', 'password', 'tel', 'date', 'datetime-local', 'checkbox', 'slider']
+            }
+        },
+        button: {
+            'button': {
+                is_container: false,
+                get_view: function(){
+                    return '<a href="#" class="button"></a>';
+                }
+            },
+            'text': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Текст',
+                field_options: null
+            },
+            'color':{
+                default: false,
+                update: function(name, type, model, view, old){
+                    change_class(view, 'color-' + old, false);
+                    change_class(view, 'color-' + model[name], true);
+                },
+                field_type: 'select',
+                field_label: 'Цвет',
+                field_options: ['optgroup-ios', 'white', 'black', 'blue', 'orange', 'red', 'pink', 'green', 'lightblue', 'yellow', 'gray', 'optgroup-material', 'red', 'pink', 'purple', 'deeppurple', 'indigo', 'blue', 'lightblue', 'cyan', 'teal', 'green', 'lightgreen', 'lime', 'yellow', 'amber', 'orange', 'deeporange', 'brown', 'gray', 'bluegray', 'black']
+            },
+            'filled': {
+                default: false,
+                update: function(name, type, model, view, old){
+                    change_class(view, 'active', model[name]);
+                    change_class(view, 'button-fill', model[name]);
+                    change_class(view, 'button-raised', model[name]);
+                },
+                field_type: 'checkbox',
+                field_label: 'Заливка',
+                field_options: null
+            },
+            'big': {
+                default: false,
+                update: function(name, type, model, view, old){
+                    change_class(view, 'button-big', model[name]);
+                },
+                field_type: 'checkbox',
+                field_label: 'Размер',
+                field_options: null
+            }
+        },
+        accordionitem: {
+            'accordionitem': {
+                is_container: false,
+                get_view: function(){
+                    return '<li class="accordion-item" onclick="this.classList.toggle(\'accordion-item-expanded\')"><a href="#" class="item-link item-content"><div class="item-inner"><div class="item-title"></div></div></a><div class="accordion-item-content"><div class="content-block"><p></p></div></div></li>';
+                }
+            },
+            'text': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(0).children().eq(0).children().eq(0).text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Текст',
+                field_options: null
+            },
+            'text2': {
+                default: '',
+                update: function(name, type, model, view, old){
+                    view.children().eq(1).children().eq(0).children().eq(0).text(model[name] || '');
+                },
+                field_type: 'input',
+                field_label: 'Текст2',
+                field_options: null
+            }
+        }
+    }
+    
+    //0 - верхнее меню, 1- табы, 2 - поиск, 3 - нижнее меню, 4 - .. - элементы
+    var app = {
+        pages: [],
+        modals: [],
+        notifications: []
+    }
+    
+    current.page = 0;
+    
+    // current.add_element('text');
+    // current.add_element('button');
+    // current.add_element('switch');
+    // current.add_element('slider');
+    // current.add_element('input_field');
+    
+    //current.page = 0;
+    
+    </script>
+</body>
+</html>

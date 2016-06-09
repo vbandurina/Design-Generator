@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>менятель элементов</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style type="text/css">
+        @import "./css/bootstrap.css";
+
+        .device-ios, .device-android {
+            margin: 10px;
+            float: left;
+        }
+
+        .device-ios {
+            width: 320px !important;
+            height: 548px !important;
+            background: #111;
+            border-radius: 55px;
+            box-shadow: 0px 0px 0px 2px #aaa;
+            padding: 105px 20px;
+            position: relative;
+        }
+
+        .device-ios:before {
+            content: '';
+            width: 60px;
+            height: 10px;
+            border-radius: 10px;
+            position: absolute;
+            left: 50%;
+            margin-left: -30px;
+            background: #333;
+            top: 50px;
+        }
+
+        .device-ios:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            margin-left: -30px;
+            bottom: 20px;
+            border-radius: 100%;
+            box-sizing: border-box;
+            border: 5px solid #333;
+        }
+
+        .device-android {
+            width: 360px !important;
+            height: 640px !important;
+            position: relative;
+            background: #111;
+            padding: 60px 20px;
+            box-shadow: 0px 0px 0px 2px #aaa;
+            border-radius: 20px;
+        }
+
+        .device-android span.back-span {
+            display: none;
+        }
+
+        .device-android:before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            margin-left: -7px;
+            background: #666;
+            top: 25px;
+        }
+
+        .device-android:after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            left: 50px;
+            background: #444;
+            top: 30px;
+        }
+        
+        .device-ios .pages{
+            padding-top:0px;
+            height: calc(100% - 44px);
+        }
+        .device-android .pages{
+            height: calc(100% - 56px);
+        }
+    </style>
+</head>
+<body style="overflow:auto;background:linear-gradient(to top, #fe521e, #D41E88);">
+<div class="row">
+    <div style="min-width:33%; max-width:370px; width:33%;">
+        <div id="phone" class="device device-ios">
+            <div class="views">
+                <div class="navbar" style="position:static;">
+                    <div class="navbar-inner" style="position:static;">
+                        <div class="left sliding"><a href="index.html" class="back link"><i
+                                class="icon icon-back"></i><span class="back-span">Back</span></a></div>
+                        <div class="center sliding">Cards</div>
+                        <div class="right"><a href="#" class="link open-panel icon-only"><i class="icon icon-bars"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pages navbar-through">
+                    <div class="page">
+                        <div id="output" class="view view-main page-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="min-width:30%; max-width:63%; padding:20px; width:100%">
+        <div class="bs-panel bs-panel-default col-100">
+            <div class="bs-panel-heading">
+                <h3 class="bs-panel-title">Параметры</h3>
+            </div>
+            <div class="row bs-panel-body form-group">
+                <div class="col-33">
+                    <a href="#" class="btn btn-default" onclick="release_to_ios()">iOS style</a>
+                    <a href="#" class="btn btn-default" onclick="release_to_material()">Android style</a>
+                </div>
+                <div class="col-66">
+                    <input type="text" class="form-control" id="usr" />
+                </div>
+            </div>
+        </div>
+
+        <div class="bs-panel bs-panel-default col-100">
+            <div class="bs-panel-heading">
+                <h3 class="bs-panel-title">Элементы</h3>
+            </div>
+            <div class="row bs-panel-body">
+                <div class="col-80 form-group">
+                    <select class="form-control" id="sample" style="width:100%;">
+                        <optgroup label="Accordion">
+                            <option>List View Accordion</option>
+                            <option>Inset Accordion</option>
+                            <option>Custom Styled Accordion</option>
+                        </optgroup>
+                        <optgroup label="Calendar">
+                            <option>Default setup</option>
+                            <option>Custom date format</option>
+                            <option>Inline with custom toolbar</option>
+                        </optgroup>
+                        <optgroup label="Cards">
+                            <option>Simple Cards</option>
+                            <option>Simple Cards With Header And Footer</option>
+                            <option>Styled Cards</option>
+                            <option>Facebook Cards</option>
+                            <option>Facebook Cards 2</option>
+                            <option>Cards With List View 1</option>
+                            <option>Cards With List View 2</option>
+                        </optgroup>
+                        <optgroup label="Checkboxes">
+                            <option>Checkbox group</option>
+                            <option>Checkbox</option>
+                        </optgroup>
+                        <optgroup label="Radio Buttons">
+                            <option>Radio buttons group</option>
+                            <option>With Media Lists</option>
+                            <option>With Media Lists2</option>
+                        </optgroup>
+                        <optgroup label="Buttons">
+                            <option>Usual button active</option>
+                            <option>Usual button</option>
+                            <option>Usual button round</option>
+                            <option>buttons row</option>
+                        </optgroup>
+                        <optgroup label="Smart Selects">
+                            <option>Smart select single</option>
+                            <option>Smart select multiple</option>
+                        </optgroup>
+                        <optgroup label="Modals">
+                            <option>alert</option>
+                            <option>password</option>
+                            <option>popup</option>
+                        </optgroup>
+                        <option>Forms</option>
+                        <optgroup label="List view">
+                            <option>Data list with icons</option>
+                            <option>Links</option>
+                            <option>Links, no icons</option>
+                            <option>Grouped with sticky titles</option>
+                            <option>Mixed and nested</option>
+                            <option>Mixed, inset</option>
+                        </optgroup>
+                        <optgroup label="Picker">
+                            <option>Picker with single value</option>
+                            <option>2 values and 3d-rotate effect</option>
+                            <option>Dependent values</option>
+                            <option>Custom toolbar</option>
+                            <option>Inline Picker / Date-time</option>
+                            </optgroup>
+                            <optgroup label="Preloader">
+                            <option>Default</option>
+                            <option>White</option>
+                            <option>Big</option>
+                            <option>Big white</option>
+                            <option>Preloader overlay</option>
+                            <option>Preloader modal</option>
+                            <option>Preloader modal with text</option>
+                        </optgroup>
+                        <optgroup label="Progress Bar">
+                            <option>not animated</option>
+                        </optgroup>
+                        <optgroup label="Search Bar">
+                            <option>searchbar</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-20">
+                    <button id="btnexec" type="button" class="btn btn-primary col-100">Выполнить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    'use strict';
+    document.getElementById('btnexec').addEventListener('click', function (e) {
+        var choice = document.getElementById('sample'),
+                choice = choice.options[choice.selectedIndex].textContent,
+                output = document.getElementById('output');
+        output.innerHTML = '';
+        switch (choice) {
+            case 'List View Accordion':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div><div class="list-block accordion-list"> <ul> <li class="accordion-item"><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Lorem Ipsum</div> </div></a> <div class="accordion-item-content"> <div class="content-block"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> </li> <li class="accordion-item"><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Nested List</div> </div></a> <div class="accordion-item-content"> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 1</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 2</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 3</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 4</div> </div> </div> </li> </ul> </div> </div> </li> <li class="accordion-item"><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Integer semper</div> </div></a> <div class="accordion-item-content"> <div class="content-block"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> </li> </ul> </div>');
+                break;
+            case 'Inset Accordion':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block accordion-list inset"> <ul> <li class="accordion-item"><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Lorem Ipsum</div> </div></a> <div class="accordion-item-content"> <div class="content-block"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> </li> <li class="accordion-item"><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Nested List</div> </div></a> <div class="accordion-item-content"> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 1</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 2</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 3</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Item 4</div> </div> </div> </li> </ul> </div> </div> </li> <li class="accordion-item"><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Integer semper</div> </div></a> <div class="accordion-item-content"> <div class="content-block"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> </li> </ul> </div>');
+                break;
+            case 'Custom Styled Accordion':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="content-block accordion-list custom-accordion"> <div class="accordion-item"> <div class="accordion-item-toggle"><i class="icon icon-ks-plus">+</i><i class="icon icon-ks-minus">-</i><span>Item 1</span></div> <div class="accordion-item-content"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> <div class="accordion-item"> <div class="accordion-item-toggle"><i class="icon icon-ks-plus">+</i><i class="icon icon-ks-minus">-</i><span>Item 2</span></div> <div class="accordion-item-content"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> <div class="accordion-item"> <div class="accordion-item-toggle"><i class="icon icon-ks-plus">+</i><i class="icon icon-ks-minus">-</i><span>Item 3</span></div> <div class="accordion-item-content"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum id neque nec commodo. Sed vel justo at turpis laoreet pellentesque quis sed lorem. Integer semper arcu nibh, non mollis arcu tempor vel. Sed pharetra tortor vitae est rhoncus, vel congue dui sollicitudin. Donec eu arcu dignissim felis viverra blandit suscipit eget ipsum.</p> </div> </div> </div>');
+                break;
+            case 'Default setup':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Your birth date" readonly="readonly" id="ks-calendar-default"/> </div> </div> </div> </li> </ul> </div>');
+                break;
+            case 'Custom date format':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Select date" readonly="readonly" id="ks-calendar-date-format"/> </div> </div> </div> </li> </ul> </div>');
+                break;
+            case 'Inline with custom toolbar':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="content-block"> <div style="padding:0; margin-right:-15px; width:auto" class="content-block-inner"> <div id="ks-calendar-inline-container"></div> </div> </div>');
+                break;
+            case 'Simple Cards':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div><div class="card"> <div class="card-content"> <div class="card-content-inner">This is simple card with plain text. But card could contain its own header, footer, list view, image, and any elements inside.</div> </div> </div>');
+                break;
+            case 'Simple Cards With Header And Footer':
+                output.insertAdjacentHTML('beforeEnd', '<div class="card"> <div class="card-header">Card header</div> <div class="card-content"> <div class="card-content-inner">Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.</div> </div> <div class="card-footer">Card Footer</div> </div>');
+                break;
+            case 'Styled Cards':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="card ks-card-header-pic"> <div style="background-image:url(http://lorempixel.com/1000/600/nature/3/)" valign="bottom" class="card-header color-white no-border">Journey To Mountains</div> <div class="card-content"> <div class="card-content-inner"> <p class="color-gray">Posted on January 21, 2015</p> <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...</p> </div> </div> <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> </div> ');
+                break;
+            case 'Facebook Cards':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="card ks-facebook-card"> <div class="card-header no-border"> <div class="ks-facebook-avatar"><img src="http://lorempixel.com/68/68/people/1/" width="34" height="34"/></div> <div class="ks-facebook-name">John Doe</div> <div class="ks-facebook-date">Monday at 3:47 PM</div> </div> <div class="card-content"> <img src="http://lorempixel.com/1000/700/nature/8/" width="100%"/></div> <div class="card-footer no-border"><a href="#" class="link">Like</a><a href="#" class="link">Comment</a><a href="#" class="link">Share</a></div> </div>');
+                break;
+            case 'Facebook Cards 2':
+                output.insertAdjacentHTML('beforeEnd', '<div class="card ks-facebook-card"> <div class="card-header"> <div class="ks-facebook-avatar"><img src="http://lorempixel.com/68/68/people/1/" width="34" height="34"/></div> <div class="ks-facebook-name">John Doe</div> <div class="ks-facebook-date">Monday at 2:15 PM</div> </div> <div class="card-content"> <div class="card-content-inner"> <p>What a nice photo i took yesterday!</p><img src="http://lorempixel.com/1000/700/nature/8/" width="100%"/> <p class="color-gray">Likes: 112 &nbsp;&nbsp; Comments: 43</p> </div> </div> <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Comment</a><a href="#" class="link">Share</a></div> </div>');
+                break;
+            case 'Cards With List View 1':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="card"> <div class="card-content"> <div class="list-block"> <ul> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Link 1</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Link 2</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Link 3</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Link 4</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Link 5</div> </div></a></li> </ul> </div> </div> </div>');
+                break;
+            case 'Cards With List View 2':
+                output.insertAdjacentHTML('beforeEnd', '<div class="card"> <div class="card-header">New Releases:</div> <div class="card-content"> <div class="list-block media-list"> <ul> <li class="item-content"> <div class="item-media"><img src="http://lorempixel.com/88/88/fashion/4" width="44"/></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">Yellow Submarine</div> </div> <div class="item-subtitle">Beatles</div> </div> </li> <li class="item-content"> <div class="item-media"><img src="http://lorempixel.com/88/88/fashion/5" width="44"/></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">Never Let You Go</div> </div> <div class="item-subtitle">Queen</div> </div> </li> <li class="item-content"> <div class="item-media"><img src="http://lorempixel.com/88/88/fashion/6" width="44"/></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">Billie Jean</div> </div> <div class="item-subtitle">Michael Jackson</div> </div> </li> </ul> </div> </div> <div class="card-footer"> <span>January 20, 2015</span><span>5 comments</span></div> </div>');
+                break;
+            case 'Checkbox group':
+                output.insertAdjacentHTML('beforeEnd', '<div class="list-block"> <ul> <li> <label class="label-checkbox item-content"> <input type="checkbox" name="ks-checkbox" value="Books" checked="checked"/> <div class="item-media"><i class="icon icon-form-checkbox"></i></div> <div class="item-inner"> <div class="item-title">Books</div> </div> </label> </li> <li> <label class="label-checkbox item-content"> <input type="checkbox" name="ks-checkbox" value="Movies"/> <div class="item-media"><i class="icon icon-form-checkbox"></i></div> <div class="item-inner"> <div class="item-title">Movies</div> </div> </label> </li> </ul> </div>');
+                break;
+            case 'Checkbox':
+                output.insertAdjacentHTML('beforeEnd', '<label class="label-checkbox item-content"> <input type="checkbox" name="ks-checkbox" value="Books" checked="checked"/> <div class="item-media"><i class="icon icon-form-checkbox"></i></div> <div class="item-inner"> <div class="item-title">Books</div> </div> </label>');
+                break;
+            case 'Radio buttons group':
+                output.insertAdjacentHTML('beforeEnd', '<div class="list-block"> <ul> <li> <label class="label-radio item-content"> <input type="radio" name="ks-radio" value="Books" checked="checked"/> <div class="item-inner"> <div class="item-title">Books</div> </div> </label> </li> <li> <label class="label-radio item-content"> <input type="radio" name="ks-radio" value="Movies"/> <div class="item-inner"> <div class="item-title">Movies</div> </div> </label> </li> </ul> </div>');
+                break;
+            case 'With Media Lists':
+                output.insertAdjacentHTML('beforeEnd', '<div class="list-block media-list"> <ul> <li> <label class="label-checkbox item-content"> <input type="checkbox" name="ks-media-checkbox" value="1"/> <div class="item-media"><i class="icon icon-form-checkbox"></i></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">Facebook</div> <div class="item-after">17:14</div> </div> <div class="item-subtitle">New messages from John Doe</div> <div class="item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus.</div> </div> </label> </li> <li> <label class="label-checkbox item-content"> <input type="checkbox" name="ks-media-checkbox" value="2"/> <div class="item-media"><i class="icon icon-form-checkbox"></i></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">John Doe (via Twitter)</div> <div class="item-after">17:11</div> </div> <div class="item-subtitle">John Doe (@_johndoe) mentioned you on Twitter!</div> <div class="item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus.</div> </div> </label> </li> </ul> </div>');
+                break;
+            case 'With Media Lists 2':
+                output.insertAdjacentHTML('beforeEnd', '<div class="list-block media-list"> <ul> <li> <label class="label-radio item-content"> <input type="radio" name="ks-media-radio" value="1" checked="checked"/> <div class="item-media"><img src="http://lorempixel.com/160/160/fashion/1" width="80"/></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">Yellow Submarine</div> <div class="item-after">$15</div> </div> <div class="item-subtitle">Beatles</div> <div class="item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus.</div> </div> </label> </li> <li> <label class="label-radio item-content"> <input type="radio" name="ks-media-radio" value="2"/> <div class="item-media"><img src="http://lorempixel.com/160/160/fashion/2" width="80"/></div> <div class="item-inner"> <div class="item-title-row"> <div class="item-title">Never Let You Go</div> <div class="item-after">$22</div> </div> <div class="item-subtitle">Queen</div> <div class="item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus.</div> </div> </label> </li> </ul> </div>');
+                break;
+            case 'Usual button active':
+                output.insertAdjacentHTML('beforeEnd', '<a href="#" class="button active">Active</a>');
+                break;
+            case 'Usual button':
+                output.insertAdjacentHTML('beforeEnd', '<a href="#" class="button">Button</a>');
+                break;
+            case 'Usual button round':
+                output.insertAdjacentHTML('beforeEnd', '<a href="#" class="button button-round">Round</a>');
+                break;
+            case 'buttons row':
+                output.insertAdjacentHTML('beforeEnd', '<div class="buttons-row"><a href="#" class="button">Button</a><a href="#" class="button">Button</a></div>');
+                break;
+            case 'Smart select single':
+                output.insertAdjacentHTML('beforeEnd', '<div class="list-block"> <ul> <li><a href="#" class="item-link smart-select"> <select name="fruits"> <option value="apple" selected="selected">Apple</option> <option value="pineapple">Pineapple</option> </select> <div class="item-content"> <div class="item-inner"> <div class="item-title">Fruit</div> </div> </div></a></li> </ul> </div>');
+                break;
+            case 'Smart select multiple':
+                output.insertAdjacentHTML('beforeEnd', '<div class="list-block"> <ul> <li><a href="#" class="item-link smart-select"> <select name="fruits" multiple="multiple"> <option value="apple" selected="selected">Apple</option> <option value="pineapple">Pineapple</option> </select> <div class="item-content"> <div class="item-inner"> <div class="item-title">Fruit</div> </div> </div></a></li> </ul> </div>');
+                break;
+            case 'Data list with icons':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> <div class="item-after">CEO</div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">John Doe</div> <div class="item-after"> <span class="badge">5</span></div> </div> </div> </li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Jenna Smith</div> </div> </div> </li> </ul> </div>'); break;
+            case 'Links':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> <div class="item-after">CEO</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">John Doe</div> <div class="item-after">Cleaner</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Jenna Smith</div> </div></a></li> </ul> </div>'); break;
+            case 'Links, no icons':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">John Doe</div> </div></a></li> <li> <div class="item-divider">Divider Here</div> </li> <li><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-inner"> <div class="item-title">Jenna Smith</div> </div></a></li> </ul> </div>'); break;
+            case 'Grouped with sticky titles':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <div class="list-group"> <ul> <li class="list-group-title">A</li> <li> <div class="item-content"> <div class="item-inner"> <div class="item-title">Aaron </div> </div> </div> </li> <li> <div class="item-content"> <div class="item-inner"> <div class="item-title">Abbie</div> </div> </div> </li> </ul> </div> </div>'); break;
+            case 'Mixed and nested':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> <div class="item-after">CEO</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Two icons here</div> </div></a></li> <li> <div class="item-content"> <div class="item-inner"> <div class="item-title">No icons here</div> </div> </div> <ul> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> <div class="item-after">CEO</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Two icons here</div> </div></a></li> <li> <div class="item-content"> <div class="item-inner"> <div class="item-title">No icons here</div> </div> </div> </li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ultra long text goes here, no, it is really really long</div> </div></a></li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">With switch</div> <div class="item-after"> <label class="label-switch"> <input type="checkbox"/> <div class="checkbox"></div> </label> </div> </div> </div> </li> </ul> </li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ultra long text goes here, no, it is really really long</div> </div></a></li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">With switch</div> <div class="item-after"> <label class="label-switch"> <input type="checkbox"/> <div class="checkbox"></div> </label> </div> </div> </div> </li> </ul> </div>'); break;
+            case 'Mixed, inset':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block inset"> <ul> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ivan Petrov</div> <div class="item-after">CEO</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Two icons here</div> </div></a></li> <li><a href="#" class="item-link item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">Ultra long text goes here, no, it is really really long</div> </div></a></li> <li> <div class="item-content"> <div class="item-media"><i class="icon icon-f7"></i></div> <div class="item-inner"> <div class="item-title">With switch</div> <div class="item-after"> <label class="label-switch"> <input type="checkbox"/> <div class="checkbox"></div> </label> </div> </div> </div> </li> </ul> <div class="list-block-label"> <p>Here comes some useful information about list above</p> </div> </div>'); break;
+            case 'alert':
+                output.insertAdjacentHTML('beforeEnd', '<a href="#" class="button demo-alert">Alert</a></span><span class="col-33"><a href="#" class="button demo-confirm">Confirm</a></span><span class="col-33"><a href="#" class="button demo-prompt">Prompt</a>'); break;
+            case 'login':
+                output.insertAdjacentHTML('beforeEnd', '<a href="#" class="button demo-login">Login Modal</a></span><span class="col-50"><a href="#" class="button demo-password">Password Modal</a>'); break;
+            case 'actions':
+                output.insertAdjacentHTML('beforeEnd', '<a href="#" class="button demo-actions">Action Sheet</a></span><span class="col-50"><a href="#" data-popup=".demo-popup" class="button open-popup">Popup  </a>'); break;
+
+
+            case 'Picker with single value':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Your iOS device" readonly="readonly" id="ks-picker-device"/> </div> </div> </div> </li> </ul> </div>'); break;
+            case '2 values and 3d-rotate effect':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Describe yourself" readonly="readonly" id="ks-picker-describe"/> </div> </div> </div> </li> </ul> </div>'); break;
+            case 'Dependent values':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Your car" readonly="readonly" id="ks-picker-dependent"/> </div> </div> </div> </li> </ul> </div>'); break;
+            case 'Custom toolbar':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="list-block"> <ul> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Describe yourself" readonly="readonly" id="ks-picker-custom-toolbar"/> </div> </div> </div> </li> </ul> </div>'); break;
+            case 'Inline Picker / Date-time':
+                output.insertAdjacentHTML('beforeEnd', '<div class="content-block-title">Title</div> <div class="content-block"> <div style="padding:0; margin-right:-15px; width:auto" class="content-block-inner"> <div style="margin:0" class="list-block"> <ul style="border-top:none"> <li> <div class="item-content"> <div class="item-inner"> <div class="item-input"> <input type="text" placeholder="Date Time" readonly="readonly" id="ks-picker-date"/> </div> </div> </div> </li> </ul> </div> <div id="ks-picker-date-container"></div> </div> </div>'); break;
+            case 'Default preloader':
+                output.insertAdjacentHTML('beforeEnd', '<span class="preloader"></span>'); break;
+            case 'White':
+                output.insertAdjacentHTML('beforeEnd', '<span class="preloader preloader-white"></span>'); break;
+            case 'Big':
+                output.insertAdjacentHTML('beforeEnd', '<span class="preloader ks-preloader-big"></span>'); break;
+            case 'Big white':
+                output.insertAdjacentHTML('beforeEnd', '<span class="preloader preloader-white ks-preloader-big"></span>'); break;
+            /*case 'Preloader overlay':
+                output.insertAdjacentHTML('beforeEnd', 'app.showIndicator()'); break;
+            case 'Preloader modal':
+                output.insertAdjacentHTML('beforeEnd', 'app.showPreloader()'); break;
+            case 'Preloader modal with text':
+                output.insertAdjacentHTML('beforeEnd', 'app.showPreloader('My text...') '); break;*/
+            case 'not animated':
+                output.insertAdjacentHTML('beforeEnd', '<div class="item-inner"> <div data-progress="40" class="progressbar color-blue"></div> </div>'); break;
+            case 'searchbar':
+                output.insertAdjacentHTML('beforeEnd', '<form data-search-list=".search-here" data-search-in=".item-title" class="searchbar searchbar-init"> <div class="searchbar-input"> <input type="search" placeholder="Search"/><a href="#" class="searchbar-clear"></a> </div><a href="#" class="searchbar-cancel">Cancel</a> </form>'); break;
+            default :
+                break;
+        }
+    }, false);
+
+</script>
+<script type="text/javascript" src="./Framework7/build/js/framework7.min.js"></script>
+<script type="text/javascript">
+    var myApp = new Framework7({
+        modalTitle: 'Framework7',
+        animateNavBackIcon: true
+    });
+
+    // Expose Internal DOM library
+    var $$ = Dom7;
+
+    // Add main view
+    var mainView = myApp.addView('.view-main', {
+        // Enable Dynamic Navbar for this view
+        dynamicNavbar: true
+    });
+    // Add another view, which is in right panel
+    var rightView = myApp.addView('.view-right', {
+        // Enable Dynamic Navbar for this view
+        dynamicNavbar: true
+    });
+    /* ===== Change statusbar bg when panel opened/closed ===== */
+    $$('.panel-left').on('open', function () {
+        $$('.statusbar-overlay').addClass('with-panel-left');
+    });
+    $$('.panel-right').on('open', function () {
+        $$('.statusbar-overlay').addClass('with-panel-right');
+    });
+    $$('.panel-left, .panel-right').on('close', function () {
+        $$('.statusbar-overlay').removeClass('with-panel-left with-panel-right');
+    });
+
+    /* ===== Generate Content Dynamically ===== */
+    var dynamicPageIndex = 0;
+    function createContentPage() {
+        mainView.router.loadContent(
+                '<!-- Top Navbar-->' +
+                '<div class="navbar">' +
+                '  <div class="navbar-inner">' +
+                '    <div class="left sliding"><a href="#" class="back link"><i class="icon icon-back"></i><span>Back</span></a></div>' +
+                '    <div class="center sliding">Dynamic Page ' + (++dynamicPageIndex) + '</div>' +
+                '  </div>' +
+                '</div>' +
+                '<div class="pages">' +
+                '  <!-- Page, data-page contains page name-->' +
+                '  <div data-page="dynamic-content" class="page">' +
+                '    <!-- Scrollable page content-->' +
+                '    <div class="page-content">' +
+                '      <div class="content-block">' +
+                '        <div class="content-block-inner">' +
+                '          <p>Here is a dynamic page created on ' + new Date() + ' !</p>' +
+                '          <p>Go <a href="#" class="back">back</a> or generate <a href="#" class="ks-generate-page">one more page</a>.</p>' +
+                '        </div>' +
+                '      </div>' +
+                '    </div>' +
+                '  </div>' +
+                '</div>'
+        );
+        return;
+    }
+    $$(document).on('click', '.ks-generate-page', createContentPage);
+</script>
+<script type="text/javascript">
+
+
+    function release_to_ios() {
+        Dom7('#phone').removeClass('device-android').addClass('device-ios');
+        Dom7('head .linkcss').remove();
+        Dom7('head').append(
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.ios.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.ios.colors.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/kitchen-sink-ios/css/kitchen-sink.css">'
+        );
+        /* ===== Modals Page events  ===== */
+        $$('.demo-alert').on('click', function () {
+            myApp.alert('Hello!');
+        });
+        $$('.demo-confirm').on('click', function () {
+            myApp.confirm('Are you feel good today?', function () {
+                myApp.alert('Great!');
+            });
+        });
+        $$('.demo-prompt').on('click', function () {
+            myApp.prompt('What is your name?', function (data) {
+                // @data contains input value
+                myApp.confirm('Are you sure that your name is ' + data + '?', function () {
+                    myApp.alert('Ok, your name is ' + data + ' ;)');
+                });
+            });
+        });
+        $$('.demo-login').on('click', function () {
+            myApp.modalLogin('Enter your username and password', function (username, password) {
+                myApp.alert('Thank you! Username: ' + username + ', password: ' + password);
+            });
+        });
+        $$('.demo-password').on('click', function () {
+            myApp.modalPassword('Enter your password', function (password) {
+                myApp.alert('Thank you! Password: ' + password);
+            });
+        });
+        $$('.demo-modals-stack').on('click', function () {
+            // Open 5 alerts
+            myApp.alert('Alert 1');
+            myApp.alert('Alert 2');
+            myApp.alert('Alert 3');
+            myApp.alert('Alert 4');
+            myApp.alert('Alert 5');
+        });
+        $$('.demo-picker-modal').on('click', function () {
+            myApp.pickerModal('.picker-modal-demo');
+        });
+
+
+        /* ===== Preloader Page events ===== */
+
+        $$('.demo-indicator').on('click', function () {
+            myApp.showIndicator();
+            setTimeout(function () {
+                myApp.hideIndicator();
+            }, 2000);
+        });
+        $$('.demo-preloader').on('click', function () {
+            myApp.showPreloader();
+            setTimeout(function () {
+                myApp.hidePreloader();
+            }, 2000);
+        });
+        $$('.demo-preloader-custom').on('click', function () {
+            myApp.showPreloader('My text...');
+            setTimeout(function () {
+                myApp.hidePreloader();
+            }, 2000);
+        });
+
+
+        /* ===== Swipe to delete events callback demo ===== */
+
+        $$('.demo-remove-callback').on('deleted', function () {
+            myApp.alert('Thanks, item removed!');
+        });
+
+
+        $$('.demo-reply').on('click', function () {
+            myApp.alert('Reply');
+        });
+        $$('.demo-mark').on('click', function () {
+            myApp.alert('Mark');
+        });
+        $$('.demo-forward').on('click', function () {
+            myApp.alert('Forward');
+        });
+
+
+        /* ===== Action sheet, we use it on few pages ===== */
+
+        var actionSheetButtons = [
+            // First buttons group
+            [
+                // Group Label
+                {
+                    text: 'Here comes some optional description or warning for actions below',
+                    label: true
+                },
+                // First button
+                {
+                    text: 'Alert',
+                    onClick: function () {
+                        myApp.alert('He Hoou!');
+                    }
+                },
+                // Another red button
+                {
+                    text: 'Nice Red Button ',
+                    color: 'red',
+                    onClick: function () {
+                        myApp.alert('You have clicked red button!');
+                    }
+                }
+            ],
+            // Second group
+            [
+                {
+                    text: 'Cancel',
+                    bold: true
+                }
+            ]
+        ];
+        $$('.demo-actions').on('click', function (e) {
+            myApp.actions(actionSheetButtons);
+        });
+        $$('.demo-actions-popover').on('click', function (e) {
+            // We need to pass additional target parameter (this) for popover
+            myApp.actions(this, actionSheetButtons);
+        });
+
+
+        /* ===== Messages Page ===== */
+
+        var conversationStarted = false;
+        var answers = [
+            'Yes!',
+            'No',
+            'Hm...',
+            'I am not sure',
+            'And what about you?',
+            'May be ;)',
+            'Lorem ipsum dolor sit amet, consectetur',
+            'What?',
+            'Are you sure?',
+            'Of course',
+            'Need to think about it',
+            'Amazing!!!'
+        ];
+        var people = [
+            {
+                name: 'Kate Johnson',
+                avatar: 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
+            },
+            {
+                name: 'Blue Ninja',
+                avatar: 'http://lorempixel.com/output/people-q-c-100-100-7.jpg'
+            }
+
+        ];
+        var answerTimeout, isFocused;
+
+        // Initialize Messages
+        var myMessages = myApp.messages('.messages');
+
+        // Initialize Messagebar
+        var myMessagebar = myApp.messagebar('.messagebar');
+
+        $$('.messagebar a.send-message').on('touchstart mousedown', function () {
+            isFocused = document.activeElement && document.activeElement === myMessagebar.textarea[0];
+        });
+        $$('.messagebar a.send-message').on('click', function (e) {
+            // Keep focused messagebar's textarea if it was in focus before
+            if (isFocused) {
+                e.preventDefault();
+                myMessagebar.textarea[0].focus();
+            }
+            var messageText = myMessagebar.value();
+            if (messageText.length === 0) {
+                return;
+            }
+            // Clear messagebar
+            myMessagebar.clear();
+
+            // Add Message
+            myMessages.addMessage({
+                text: messageText,
+                type: 'sent',
+                day: !conversationStarted ? 'Today' : false,
+                time: !conversationStarted ? (new Date()).getHours() + ':' + (new Date()).getMinutes() : false
+            });
+            conversationStarted = true;
+            // Add answer after timeout
+            if (answerTimeout) clearTimeout(answerTimeout);
+            answerTimeout = setTimeout(function () {
+                var answerText = answers[Math.floor(Math.random() * answers.length)];
+                var person = people[Math.floor(Math.random() * people.length)];
+                myMessages.addMessage({
+                    text: answers[Math.floor(Math.random() * answers.length)],
+                    type: 'received',
+                    name: person.name,
+                    avatar: person.avatar
+                });
+            }, 2000);
+        });
+
+
+        /* ===== Photo Browser Examples ===== */
+        // Create photoprobsers first:
+        var photoBrowserPhotos = [
+            {
+                url: 'img/beach.jpg',
+                caption: 'Amazing beach in Goa, India'
+            },
+            'http://placekitten.com/1024/1024',
+            'img/lock.jpg',
+            {
+                url: 'img/monkey.jpg',
+                caption: 'I met this monkey in Chinese mountains'
+            },
+            {
+                url: 'img/mountains.jpg',
+                caption: 'Beautiful mountains in Zhangjiajie, China'
+            }
+
+        ];
+        var photoBrowserStandalone = myApp.photoBrowser({
+            photos: photoBrowserPhotos
+        });
+        var photoBrowserPopup = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            type: 'popup'
+        });
+        var photoBrowserPage = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            type: 'page',
+            backLinkText: 'Back'
+        });
+        var photoBrowserDark = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            theme: 'dark'
+        });
+        var photoBrowserPopupDark = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            theme: 'dark',
+            type: 'popup'
+        });
+        var photoBrowserLazy = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            lazyLoading: true,
+            theme: 'dark'
+        });
+
+        $$('.ks-pb-standalone').on('click', function () {
+            photoBrowserStandalone.open();
+        });
+        $$('.ks-pb-popup').on('click', function () {
+            photoBrowserPopup.open();
+        });
+        $$('.ks-pb-page').on('click', function () {
+            photoBrowserPage.open();
+        });
+        $$('.ks-pb-popup-dark').on('click', function () {
+            photoBrowserPopupDark.open();
+        });
+        $$('.ks-pb-standalone-dark').on('click', function () {
+            photoBrowserDark.open();
+        });
+        $$('.ks-pb-lazy').on('click', function () {
+            photoBrowserLazy.open();
+        });
+
+
+        /* ===== Notifications Page ===== */
+
+        $$('.ks-notification-simple').on('click', function () {
+            myApp.addNotification({
+                title: 'Framework7',
+                message: 'This is a simple notification message with title and message'
+            });
+        });
+        $$('.ks-notification-full').on('click', function () {
+            myApp.addNotification({
+                title: 'Framework7',
+                subtitle: 'Notification subtitle',
+                message: 'This is a simple notification message with custom icon and subtitle',
+                media: '<i class="icon icon-f7"></i>'
+            });
+        });
+        $$('.ks-notification-custom').on('click', function () {
+            myApp.addNotification({
+                title: 'My Awesome App',
+                subtitle: 'New message from John Doe',
+                message: 'Hello, how are you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut posuere erat. Pellentesque id elementum urna, a aliquam ante. Donec vitae volutpat orci. Aliquam sed molestie risus, quis tincidunt dui.',
+                media: '<img width="44" height="44" style="border-radius:100%" src="http://lorempixel.com/output/people-q-c-100-100-9.jpg">'
+            });
+        });
+        $$('.ks-notification-callback').on('click', function () {
+            myApp.addNotification({
+                title: 'My Awesome App',
+                subtitle: 'New message from John Doe',
+                message: 'Hello, how are you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut posuere erat. Pellentesque id elementum urna, a aliquam ante. Donec vitae volutpat orci. Aliquam sed molestie risus, quis tincidunt dui.',
+                media: '<img width="44" height="44" style="border-radius:100%" src="http://lorempixel.com/output/people-q-c-100-100-9.jpg">',
+                onClose: function () {
+                    myApp.alert('Notification closed');
+                }
+            });
+        });
+
+
+        /* ===== Login screen page events ===== */
+/*
+        $$(page.container).find('.list-button').on('click', function () {
+            var username = $$(page.container).find('input[name="username"]').val();
+            var password = $$(page.container).find('input[name="password"]').val();
+            myApp.alert('Username: ' + username + ', password: ' + password, function () {
+                mainView.router.back();
+            });
+        });
+ */
+        $$('.login-screen').find('.list-button').on('click', function () {
+            var username = $$('.login-screen').find('input[name="username"]').val();
+            var password = $$('.login-screen').find('input[name="password"]').val();
+            myApp.alert('Username: ' + username + ', password: ' + password, function () {
+                myApp.closeModal('.login-screen');
+            });
+        });
+
+        /* ===== Demo Popover ===== */
+        $$('.popover a').on('click', function () {
+            myApp.closeModal('.popover');
+        });
+
+        /* ===== Color themes ===== */
+/*
+        var themes = 'theme-white theme-black theme-yellow theme-red theme-blue theme-green theme-pink theme-lightblue theme-orange theme-gray';
+        var layouts = 'layout-dark layout-white';
+        $$(page.container).find('.ks-color-theme').click(function () {
+            $$('body').removeClass(themes).addClass('theme-' + $$(this).attr('data-theme'));
+        });
+        $$(page.container).find('.ks-layout-theme').click(function () {
+            $$('body').removeClass(layouts).addClass('layout-' + $$(this).attr('data-theme'));
+        });*/
+
+
+        /* ===== Virtual List ===== */
+
+        // Generate array with 10000 demo items:
+        var items = [];
+        for (var i = 0; i < 10000; i++) {
+            items.push({
+                title: 'Item ' + i,
+                subtitle: 'Subtitle ' + i
+            });
+        }
+
+        // Create virtual list
+        /*var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+            // Pass array with items
+            items: items,
+            // Custom search function for searchbar
+            searchAll: function (query, items) {
+                var found = [];
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].title.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                }
+                return found; //return array with mathced indexes
+            },
+            // List item Template7 template
+            template: '<li>' +
+            '<a href="#" class="item-link item-content">' +
+            '<div class="item-inner">' +
+            '<div class="item-title-row">' +
+            '<div class="item-title">{{title}}</div>' +
+            '</div>' +
+            '<div class="item-subtitle">{{subtitle}}</div>' +
+            '</div>' +
+            '</a>' +
+            '</li>',
+            // Item height
+            height: 63,
+        });*/
+
+        /* ===== Swiper Two Way Control Gallery ===== */
+
+        var swiperTop = myApp.swiper('.ks-swiper-gallery-top', {
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            spaceBetween: 10
+        });
+        var swiperThumbs = myApp.swiper('.ks-swiper-gallery-thumbs', {
+            slidesPerView: 'auto',
+            spaceBetween: 10,
+            centeredSlides: true,
+            touchRatio: 0.2,
+            slideToClickedSlide: true
+        });
+        swiperTop.params.control = swiperThumbs;
+        swiperThumbs.params.control = swiperTop;
+
+        /* ===== Calendar ===== */
+
+        // Default
+        var calendarDefault = myApp.calendar({
+            input: '#ks-calendar-default',
+        });
+        // With custom date format
+        var calendarDateFormat = myApp.calendar({
+            input: '#ks-calendar-date-format',
+            dateFormat: 'DD, MM dd, yyyy'
+        });
+        // With multiple values
+        var calendarMultiple = myApp.calendar({
+            input: '#ks-calendar-multiple',
+            dateFormat: 'M dd yyyy',
+            multiple: true
+        });
+        // Range Picker
+        var calendarRange = myApp.calendar({
+            input: '#ks-calendar-range',
+            dateFormat: 'M dd yyyy',
+            rangePicker: true
+        });
+        // Inline with custom toolbar
+        var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var calendarInline = myApp.calendar({
+            container: '#ks-calendar-inline-container',
+            value: [new Date()],
+            weekHeader: false,
+            toolbarTemplate: '<div class="toolbar calendar-custom-toolbar">' +
+            '<div class="toolbar-inner">' +
+            '<div class="left">' +
+            '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+            '</div>' +
+            '<div class="center"></div>' +
+            '<div class="right">' +
+            '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            onOpen: function (p) {
+                $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] + ', ' + p.currentYear);
+                $$('.calendar-custom-toolbar .left .link').on('click', function () {
+                    calendarInline.prevMonth();
+                });
+                $$('.calendar-custom-toolbar .right .link').on('click', function () {
+                    calendarInline.nextMonth();
+                });
+            },
+            onMonthYearChangeStart: function (p) {
+                $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] + ', ' + p.currentYear);
+            }
+        });
+
+        /* ===== Pickers ===== */
+
+        var today = new Date();
+
+        // iOS Device picker
+        var pickerDevice = myApp.picker({
+            input: '#ks-picker-device',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: ['iPhone 4', 'iPhone 4S', 'iPhone 5', 'iPhone 5S', 'iPhone 6', 'iPhone 6 Plus', 'iPad 2', 'iPad Retina', 'iPad Air', 'iPad mini', 'iPad mini 2', 'iPad mini 3']
+                }
+            ]
+        });
+
+        // Describe yourself picker
+        var pickerDescribe = myApp.picker({
+            input: '#ks-picker-describe',
+            rotateEffect: true,
+            cols: [
+                {
+                    textAlign: 'left',
+                    values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
+                },
+                {
+                    values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
+                },
+            ]
+        });
+
+        // Dependent values
+        var carVendors = {
+            Japanese: ['Honda', 'Lexus', 'Mazda', 'Nissan', 'Toyota'],
+            German: ['Audi', 'BMW', 'Mercedes', 'Volkswagen', 'Volvo'],
+            American: ['Cadillac', 'Chrysler', 'Dodge', 'Ford']
+        };
+        var pickerDependent = myApp.picker({
+            input: '#ks-picker-dependent',
+            rotateEffect: true,
+            formatValue: function (picker, values) {
+                return values[1];
+            },
+            cols: [
+                {
+                    textAlign: 'left',
+                    values: ['Japanese', 'German', 'American'],
+                    onChange: function (picker, country) {
+                        if (picker.cols[1].replaceValues) {
+                            picker.cols[1].replaceValues(carVendors[country]);
+                        }
+                    }
+                },
+                {
+                    values: carVendors.Japanese,
+                    width: 160,
+                },
+            ]
+        });
+
+        // Custom Toolbar
+        var pickerCustomToolbar = myApp.picker({
+            input: '#ks-picker-custom-toolbar',
+            rotateEffect: true,
+            toolbarTemplate: '<div class="toolbar">' +
+            '<div class="toolbar-inner">' +
+            '<div class="left">' +
+            '<a href="#" class="link toolbar-randomize-link">Randomize</a>' +
+            '</div>' +
+            '<div class="right">' +
+            '<a href="#" class="link close-picker">That\'s me</a>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            cols: [
+                {
+                    values: ['Mr', 'Ms'],
+                },
+                {
+                    textAlign: 'left',
+                    values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
+                },
+                {
+                    values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
+                },
+            ],
+            onOpen: function (picker) {
+                picker.container.find('.toolbar-randomize-link').on('click', function () {
+                    var col0Values = picker.cols[0].values;
+                    var col0Random = col0Values[Math.floor(Math.random() * col0Values.length)];
+
+                    var col1Values = picker.cols[1].values;
+                    var col1Random = col1Values[Math.floor(Math.random() * col1Values.length)];
+
+                    var col2Values = picker.cols[2].values;
+                    var col2Random = col2Values[Math.floor(Math.random() * col2Values.length)];
+
+                    picker.setValue([col0Random, col1Random, col2Random]);
+                });
+            }
+        });
+
+        // Inline date-time
+        var pickerInline = myApp.picker({
+            input: '#ks-picker-date',
+            container: '#ks-picker-date-container',
+            toolbar: false,
+            rotateEffect: true,
+            value: [today.getMonth(), today.getDate(), today.getFullYear(), today.getHours(), (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes())],
+            onChange: function (picker, values, displayValues) {
+                var daysInMonth = new Date(picker.value[2], picker.value[0] * 1 + 1, 0).getDate();
+                if (values[1] > daysInMonth) {
+                    picker.cols[1].setValue(daysInMonth);
+                }
+            },
+            formatValue: function (p, values, displayValues) {
+                return displayValues[0] + ' ' + values[1] + ', ' + values[2] + ' ' + values[3] + ':' + values[4];
+            },
+            cols: [
+                // Months
+                {
+                    values: ('0 1 2 3 4 5 6 7 8 9 10 11').split(' '),
+                    displayValues: ('January February March April May June July August September October November December').split(' '),
+                    textAlign: 'left'
+                },
+                // Days
+                {
+                    values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+                },
+                // Years
+                {
+                    values: (function () {
+                        var arr = [];
+                        for (var i = 1950; i <= 2030; i++) {
+                            arr.push(i);
+                        }
+                        return arr;
+                    })(),
+                },
+                // Space divider
+                {
+                    divider: true,
+                    content: '&nbsp;&nbsp;'
+                },
+                // Hours
+                {
+                    values: (function () {
+                        var arr = [];
+                        for (var i = 0; i <= 23; i++) {
+                            arr.push(i);
+                        }
+                        return arr;
+                    })(),
+                },
+                // Divider
+                {
+                    divider: true,
+                    content: ':'
+                },
+                // Minutes
+                {
+                    values: (function () {
+                        var arr = [];
+                        for (var i = 0; i <= 59; i++) {
+                            arr.push(i < 10 ? '0' + i : i);
+                        }
+                        return arr;
+                    })(),
+                }
+            ]
+        });
+
+
+        /* ===== Progress Bars ===== */
+
+        $$('.ks-demo-progressbar-inline .button').on('click', function () {
+            var progress = $$(this).attr('data-progress');
+            var progressbar = $$('.ks-demo-progressbar-inline .progressbar');
+            myApp.setProgressbar(progressbar, progress);
+        });
+        $$('.ks-demo-progressbar-load-hide .button').on('click', function () {
+            var container = $$('.ks-demo-progressbar-load-hide p:first-child');
+            if (container.children('.progressbar').length) return; //don't run all this if there is a current progressbar loading
+
+            myApp.showProgressbar(container, 0);
+
+            // Simluate Loading Something
+            var progress = 0;
+
+            function simulateLoading() {
+                setTimeout(function () {
+                    var progressBefore = progress;
+                    progress += Math.random() * 20;
+                    myApp.setProgressbar(container, progress);
+                    if (progressBefore < 100) {
+                        simulateLoading(); //keep "loading"
+                    }
+                    else myApp.hideProgressbar(container); //hide
+                }, Math.random() * 200 + 200);
+            }
+
+            simulateLoading();
+        });
+        $$('.ks-demo-progressbar-overlay .button').on('click', function () {
+            // Add Directly To Body
+            var container = $$('body');
+            if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
+
+            myApp.showProgressbar(container, 0);
+
+            // Simluate Loading Something
+            var progress = 0;
+
+            function simulateLoading() {
+                setTimeout(function () {
+                    var progressBefore = progress;
+                    progress += Math.random() * 20;
+                    myApp.setProgressbar(container, progress);
+                    if (progressBefore < 100) {
+                        simulateLoading(); //keep "loading"
+                    }
+                    else myApp.hideProgressbar(container); //hide
+                }, Math.random() * 200 + 200);
+            }
+
+            simulateLoading();
+        });
+        $$('.ks-demo-progressbar-infinite-overlay .button').on('click', function () {
+            // Add Directly To Body
+            var container = $$('body');
+            if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
+            myApp.showProgressbar(container);
+            setTimeout(function () {
+                myApp.hideProgressbar();
+            }, 3000);
+        });
+        $$('.ks-demo-progressbar-infinite-multi-overlay .button').on('click', function () {
+            var container = $$('body');
+            if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
+            myApp.showProgressbar(container, 'multi');
+            setTimeout(function () {
+                myApp.hideProgressbar();
+            }, 3000);
+        });
+
+
+        /* ===== Autocomplete ===== */
+
+        // Fruits data demo array
+        var fruits = ('Apple Apricot Avocado Banana Melon Orange Peach Pear Pineapple').split(' ');
+
+        // Simple Dropdown
+        var autocompleteDropdownSimple = myApp.autocomplete({
+            input: '#autocomplete-dropdown',
+            openIn: 'dropdown',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with input expand
+        var autocompleteDropdownExpand = myApp.autocomplete({
+            input: '#autocomplete-dropdown-expand',
+            openIn: 'dropdown',
+            expandInput: true, // expand input
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with all values
+        var autocompleteDropdownAll = myApp.autocomplete({
+            input: '#autocomplete-dropdown-all',
+            openIn: 'dropdown',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with placeholder
+        var autocompleteDropdownPlaceholder = myApp.autocomplete({
+            input: '#autocomplete-dropdown-placeholder',
+            openIn: 'dropdown',
+            dropdownPlaceholderText: 'Try to type "Apple"',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with ajax data
+        var autocompleteDropdownAjax = myApp.autocomplete({
+            input: '#autocomplete-dropdown-ajax',
+            openIn: 'dropdown',
+            preloader: true, //enable preloader
+            valueProperty: 'id', //object's "value" property name
+            textProperty: 'name', //object's "text" property name
+            limit: 20, //limit to 20 results
+            dropdownPlaceholderText: 'Try "JavaScript"',
+            expandInput: true, // expand input
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Show Preloader
+                autocomplete.showPreloader();
+                // Do Ajax request to Autocomplete data
+                $$.ajax({
+                    url: 'js/autocomplete-languages.json',
+                    method: 'GET',
+                    dataType: 'json',
+                    //send "query" to server. Useful in case you generate response dynamically
+                    data: {
+                        query: query
+                    },
+                    success: function (data) {
+                        // Find matched items
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].name.toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(data[i]);
+                        }
+                        // Hide Preoloader
+                        autocomplete.hidePreloader();
+                        // Render items by passing array with result items
+                        render(results);
+                    }
+                });
+            }
+        });
+
+        // Simple Standalone
+        var autocompleteStandaloneSimple = myApp.autocomplete({
+            openIn: 'page', //open in page
+            opener: $$('#autocomplete-standalone'), //link that opens autocomplete
+            backOnSelect: true, //go back after we select something
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            },
+            onChange: function (autocomplete, value) {
+                // Add item text value to item-after
+                $$('#autocomplete-standalone').find('.item-after').text(value[0]);
+                // Add item value to input value
+                $$('#autocomplete-standalone').find('input').val(value[0]);
+            }
+        });
+
+        // Standalone Popup
+        var autocompleteStandalonePopup = myApp.autocomplete({
+            openIn: 'popup', //open in page
+            opener: $$('#autocomplete-standalone-popup'), //link that opens autocomplete
+            backOnSelect: true, //go back after we select something
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            },
+            onChange: function (autocomplete, value) {
+                // Add item text value to item-after
+                $$('#autocomplete-standalone-popup').find('.item-after').text(value[0]);
+                // Add item value to input value
+                $$('#autocomplete-standalone-popup').find('input').val(value[0]);
+            }
+        });
+
+        // Multiple Standalone
+        var autocompleteStandaloneMultiple = myApp.autocomplete({
+            openIn: 'page', //open in page
+            opener: $$('#autocomplete-standalone-multiple'), //link that opens autocomplete
+            multiple: true, //allow multiple values
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            },
+            onChange: function (autocomplete, value) {
+                // Add item text value to item-after
+                $$('#autocomplete-standalone-multiple').find('.item-after').text(value.join(', '));
+                // Add item value to input value
+                $$('#autocomplete-standalone-multiple').find('input').val(value.join(', '));
+            }
+        });
+
+        // Standalone With Ajax
+        var autocompleteStandaloneAjax = myApp.autocomplete({
+            openIn: 'page', //open in page
+            opener: $$('#autocomplete-standalone-ajax'), //link that opens autocomplete
+            multiple: true, //allow multiple values
+            valueProperty: 'id', //object's "value" property name
+            textProperty: 'name', //object's "text" property name
+            limit: 50,
+            preloader: true, //enable preloader
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Show Preloader
+                autocomplete.showPreloader();
+                // Do Ajax request to Autocomplete data
+                $$.ajax({
+                    url: 'js/autocomplete-languages.json',
+                    method: 'GET',
+                    dataType: 'json',
+                    //send "query" to server. Useful in case you generate response dynamically
+                    data: {
+                        query: query
+                    },
+                    success: function (data) {
+                        // Find matched items
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].name.toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(data[i]);
+                        }
+                        // Hide Preoloader
+                        autocomplete.hidePreloader();
+                        // Render items by passing array with result items
+                        render(results);
+                    }
+                });
+            },
+            onChange: function (autocomplete, value) {
+                var itemText = [],
+                        inputValue = [];
+                for (var i = 0; i < value.length; i++) {
+                    itemText.push(value[i].name);
+                    inputValue.push(value[i].id);
+                }
+                // Add item text value to item-after
+                $$('#autocomplete-standalone-ajax').find('.item-after').text(itemText.join(', '));
+                // Add item value to input value
+                $$('#autocomplete-standalone-ajax').find('input').val(inputValue.join(', '));
+            }
+        });
+
+    }
+
+    function release_to_material() {
+        Dom7('#phone').removeClass('device-ios').addClass('device-android');
+        Dom7('head .linkcss').remove();
+        Dom7('head').append(
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.material.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/build/css/framework7.material.colors.min.css">' +
+                '<link rel="stylesheet" class="linkcss" href="./Framework7/kitchen-sink-material/css/kitchen-sink.css">'
+        );
+        /* ======== Modals =========*/
+
+        $$('.demo-alert').on('click', function () {
+            myApp.alert('Hello!');
+        });
+        $$('.demo-confirm').on('click', function () {
+            myApp.confirm('Are you feel good today?', function () {
+                myApp.alert('Great!');
+            });
+        });
+        $$('.demo-prompt').on('click', function () {
+            myApp.prompt('What is your name?', function (data) {
+                // @data contains input value
+                myApp.confirm('Are you sure that your name is ' + data + '?', function () {
+                    myApp.alert('Ok, your name is ' + data + ' ;)');
+                });
+            });
+        });
+        $$('.demo-login').on('click', function () {
+            myApp.modalLogin('Enter your username and password', function (username, password) {
+                myApp.alert('Thank you! Username: ' + username + ', password: ' + password);
+            });
+        });
+        $$('.demo-password').on('click', function () {
+            myApp.modalPassword('Enter your password', function (password) {
+                myApp.alert('Thank you! Password: ' + password);
+            });
+        });
+        $$('.demo-modals-stack').on('click', function () {
+            // Open 5 alerts
+            myApp.alert('Alert 1');
+            myApp.alert('Alert 2');
+            myApp.alert('Alert 3');
+            myApp.alert('Alert 4');
+            myApp.alert('Alert 5');
+        });
+        $$('.demo-picker-modal').on('click', function () {
+            myApp.pickerModal('.picker-modal-demo');
+        });
+
+
+        /* ===== Preloader Page events ===== */
+
+        $$('.demo-indicator').on('click', function () {
+            myApp.showIndicator();
+            setTimeout(function () {
+                myApp.hideIndicator();
+            }, 2000);
+        });
+        $$('.demo-preloader').on('click', function () {
+            myApp.showPreloader();
+            setTimeout(function () {
+                myApp.hidePreloader();
+            }, 2000);
+        });
+        $$('.demo-preloader-custom').on('click', function () {
+            myApp.showPreloader('My text...');
+            setTimeout(function () {
+                myApp.hidePreloader();
+            }, 2000);
+        });
+
+
+        /* ===== Swipe to delete events callback demo ===== */
+
+        $$('.demo-remove-callback').on('deleted', function () {
+            myApp.alert('Thanks, item removed!');
+        });
+
+        $$('.demo-reply').on('click', function () {
+            myApp.alert('Reply');
+        });
+        $$('.demo-mark').on('click', function () {
+            myApp.alert('Mark');
+        });
+        $$('.demo-forward').on('click', function () {
+            myApp.alert('Forward');
+        });
+
+        /* ===== Action sheet, we use it on few pages ===== */
+
+        var actionSheetButtons = [
+            // First buttons group
+            [
+                // Group Label
+                {
+                    text: 'Choose some action',
+                    label: true
+                },
+                // First button
+                {
+                    text: 'Alert',
+                    onClick: function () {
+                        myApp.alert('He Hoou!');
+                    }
+                },
+                // Second button
+                {
+                    text: 'Second Alert',
+                    onClick: function () {
+                        myApp.alert('Second Alert!');
+                    }
+                },
+                // Another red button
+                {
+                    text: 'Nice Red Button ',
+                    color: 'red',
+                    onClick: function () {
+                        myApp.alert('You have clicked red button!');
+                    }
+                }
+            ],
+            // Second group
+            [
+                {
+                    text: 'Cancel'
+                }
+            ]
+        ];
+        $$('.demo-actions').on('click', function (e) {
+            myApp.actions(actionSheetButtons);
+        });
+        $$('.demo-actions-popover').on('click', function (e) {
+            // We need to pass additional target parameter (this) for popover
+            myApp.actions(this, actionSheetButtons);
+        });
+
+
+        /* ===== Messages Page ===== */
+
+        var conversationStarted = false;
+        var answers = [
+            'Yes!',
+            'No',
+            'Hm...',
+            'I am not sure',
+            'And what about you?',
+            'May be ;)',
+            'Lorem ipsum dolor sit amet, consectetur',
+            'What?',
+            'Are you sure?',
+            'Of course',
+            'Need to think about it',
+            'Amazing!!!'
+        ];
+        var people = [
+            {
+                name: 'Kate Johnson',
+                avatar: 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
+            },
+            {
+                name: 'Blue Ninja',
+                avatar: 'http://lorempixel.com/output/people-q-c-100-100-7.jpg'
+            }
+
+        ];
+        var answerTimeout, isFocused;
+
+        // Initialize Messages
+        var myMessages = myApp.messages('.messages');
+
+        // Initialize Messagebar
+        var myMessagebar = myApp.messagebar('.messagebar');
+
+        $$('.messagebar a.send-message').on('touchstart mousedown', function () {
+            isFocused = document.activeElement && document.activeElement === myMessagebar.textarea[0];
+        });
+        $$('.messagebar a.send-message').on('click', function (e) {
+            // Keep focused messagebar's textarea if it was in focus before
+            if (isFocused) {
+                e.preventDefault();
+                myMessagebar.textarea[0].focus();
+            }
+            var messageText = myMessagebar.value();
+            if (messageText.length === 0) {
+                return;
+            }
+            // Clear messagebar
+            myMessagebar.clear();
+
+            // Add Message
+            myMessages.addMessage({
+                text: messageText,
+                avatar: 'http://lorempixel.com/output/people-q-c-200-200-6.jpg',
+                type: 'sent',
+                date: 'Now'
+            });
+            conversationStarted = true;
+            // Add answer after timeout
+            if (answerTimeout) clearTimeout(answerTimeout);
+            answerTimeout = setTimeout(function () {
+                var answerText = answers[Math.floor(Math.random() * answers.length)];
+                var person = people[Math.floor(Math.random() * people.length)];
+                myMessages.addMessage({
+                    text: answers[Math.floor(Math.random() * answers.length)],
+                    type: 'received',
+                    name: person.name,
+                    avatar: person.avatar,
+                    date: 'Just now'
+                });
+            }, 2000);
+        });
+
+
+        /* ===== Photo Browser Examples ===== */
+        // Create photoprobsers first:
+        var photoBrowserPhotos = [
+            {
+                url: 'img/beach.jpg',
+                caption: 'Amazing beach in Goa, India'
+            },
+            'http://placekitten.com/1024/1024',
+            'img/lock.jpg',
+            {
+                url: 'img/monkey.jpg',
+                caption: 'I met this monkey in Chinese mountains'
+            },
+            {
+                url: 'img/mountains.jpg',
+                caption: 'Beautiful mountains in Zhangjiajie, China'
+            }
+
+        ];
+        var photoBrowserStandalone = myApp.photoBrowser({
+            photos: photoBrowserPhotos
+        });
+        var photoBrowserPopup = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            type: 'popup'
+        });
+        var photoBrowserPage = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            type: 'page'
+        });
+        var photoBrowserDark = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            theme: 'dark'
+        });
+        var photoBrowserPopupDark = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            theme: 'dark',
+            type: 'popup'
+        });
+        var photoBrowserLazy = myApp.photoBrowser({
+            photos: photoBrowserPhotos,
+            lazyLoading: true,
+            theme: 'dark'
+        });
+
+        $$('.ks-pb-standalone').on('click', function () {
+            photoBrowserStandalone.open();
+        });
+        $$('.ks-pb-popup').on('click', function () {
+            photoBrowserPopup.open();
+        });
+        $$('.ks-pb-page').on('click', function () {
+            photoBrowserPage.open();
+        });
+        $$('.ks-pb-popup-dark').on('click', function () {
+            photoBrowserPopupDark.open();
+        });
+        $$('.ks-pb-standalone-dark').on('click', function () {
+            photoBrowserDark.open();
+        });
+        $$('.ks-pb-lazy').on('click', function () {
+            photoBrowserLazy.open();
+        });
+
+
+        /* ===== Notifications Page ===== */
+
+        $$('.ks-notification-1').on('click', function () {
+            myApp.addNotification({
+                message: 'Simple message'
+            });
+        });
+        $$('.ks-notification-2').on('click', function () {
+            myApp.addNotification({
+                message: 'Multi-line message. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in magna nisi.',
+            });
+        });
+        $$('.ks-notification-3').on('click', function () {
+            myApp.addNotification({
+                message: 'Nice yellow button',
+                button: {
+                    text: 'Click me',
+                    color: 'yellow'
+                }
+            });
+        });
+        $$('.ks-notification-4').on('click', function () {
+            myApp.addNotification({
+                message: 'Close me to see Alert',
+                button: {
+                    text: 'Close',
+                    color: 'lightgreen'
+                },
+                onClose: function () {
+                    myApp.alert('Notification closed');
+                }
+            });
+        });
+
+
+        /* ===== Login screen page events ===== */
+/*
+        $$(page.container).find('.button').on('click', function () {
+            var username = $$(page.container).find('input[name="username"]').val();
+            var password = $$(page.container).find('input[name="password"]').val();
+            myApp.alert('Username: ' + username + ', password: ' + password, function () {
+                mainView.router.back();
+            });
+        });*/
+
+        $$('.login-screen').find('.button').on('click', function () {
+            var username = $$('.login-screen').find('input[name="username"]').val();
+            var password = $$('.login-screen').find('input[name="password"]').val();
+            myApp.alert('Username: ' + username + ', password: ' + password, function () {
+                myApp.closeModal('.login-screen');
+            });
+
+
+            /* ===== Demo Popover ===== */
+            $$('.popover a').on('click', function () {
+                myApp.closeModal('.popover');
+            });
+
+            /* ===== Color themes ===== */
+/*
+            $$(page.container).find('.ks-color-theme').click(function () {
+                var classList = $$('body')[0].classList;
+                for (var i = 0; i < classList.length; i++) {
+                    if (classList[i].indexOf('theme') === 0) classList.remove(classList[i]);
+                }
+                classList.add('theme-' + $$(this).attr('data-theme'));
+            });
+            $$(page.container).find('.ks-layout-theme').click(function () {
+                var classList = $$('body')[0].classList;
+                for (var i = 0; i < classList.length; i++) {
+                    if (classList[i].indexOf('layout-') === 0) classList.remove(classList[i]);
+                }
+                classList.add('layout-' + $$(this).attr('data-theme'));
+            });*/
+
+
+            /* ===== Virtual List ===== */
+
+            // Generate array with 10000 demo items:
+            var items = [];
+            for (var i = 0; i < 10000; i++) {
+                items.push({
+                    title: 'Item ' + i,
+                    subtitle: 'Subtitle ' + i
+                });
+            }
+
+            // Create virtual list
+            /*var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                // Pass array with items
+                items: items,
+                // Custom search function for searchbar
+                searchAll: function (query, items) {
+                    var found = [];
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].title.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                    }
+                    return found; //return array with mathced indexes
+                },
+                // List item Template7 template
+                template: '<li>' +
+                '<a href="#" class="item-link item-content">' +
+                '<div class="item-inner">' +
+                '<div class="item-title-row">' +
+                '<div class="item-title">{{title}}</div>' +
+                '</div>' +
+                '<div class="item-subtitle">{{subtitle}}</div>' +
+                '</div>' +
+                '</a>' +
+                '</li>',
+                // Item height
+                height: 73
+            });*/
+
+            /* ===== Swiper Two Way Control Gallery ===== */
+
+            var swiperTop = myApp.swiper('.ks-swiper-gallery-top', {
+                nextButton: '.swiper-button-next',
+                prevButton: '.swiper-button-prev',
+                spaceBetween: 10
+            });
+            var swiperThumbs = myApp.swiper('.ks-swiper-gallery-thumbs', {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                centeredSlides: true,
+                touchRatio: 0.2,
+                slideToClickedSlide: true
+            });
+            swiperTop.params.control = swiperThumbs;
+            swiperThumbs.params.control = swiperTop;
+
+            /* ===== Calendar ===== */
+
+            // Default
+            var calendarDefault = myApp.calendar({
+                input: '#ks-calendar-default',
+            });
+            // With custom date format
+            var calendarDateFormat = myApp.calendar({
+                input: '#ks-calendar-date-format',
+                dateFormat: 'DD, MM dd, yyyy'
+            });
+            // With multiple values
+            var calendarMultiple = myApp.calendar({
+                input: '#ks-calendar-multiple',
+                dateFormat: 'M dd yyyy',
+                multiple: true
+            });
+            // Range Picker
+            var calendarRange = myApp.calendar({
+                input: '#ks-calendar-range',
+                dateFormat: 'M dd yyyy',
+                rangePicker: true
+            });
+            // Inline with custom toolbar
+            var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var calendarInline = myApp.calendar({
+                container: '#ks-calendar-inline-container',
+                value: [new Date()],
+                weekHeader: false,
+                header: false,
+                footer: false,
+                toolbarTemplate: '<div class="toolbar calendar-custom-toolbar">' +
+                '<div class="toolbar-inner">' +
+                '<div class="left">' +
+                '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+                '</div>' +
+                '<div class="center"></div>' +
+                '<div class="right">' +
+                '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+                '</div>' +
+                '</div>' +
+                '</div>',
+                onOpen: function (p) {
+                    $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] + ', ' + p.currentYear);
+                    $$('.calendar-custom-toolbar .left .link').on('click', function () {
+                        calendarInline.prevMonth();
+                    });
+                    $$('.calendar-custom-toolbar .right .link').on('click', function () {
+                        calendarInline.nextMonth();
+                    });
+                },
+                onMonthYearChangeStart: function (p) {
+                    $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] + ', ' + p.currentYear);
+                }
+            });
+
+
+            /* ===== Pickers ===== */
+
+            var today = new Date();
+
+            // iOS Device picker
+            var pickerDevice = myApp.picker({
+                input: '#ks-picker-device',
+                cols: [
+                    {
+                        textAlign: 'center',
+                        values: ['iPhone 4', 'iPhone 4S', 'iPhone 5', 'iPhone 5S', 'iPhone 6', 'iPhone 6 Plus', 'iPad 2', 'iPad Retina', 'iPad Air', 'iPad mini', 'iPad mini 2', 'iPad mini 3']
+                    }
+                ]
+            });
+
+            // Describe yourself picker
+            var pickerDescribe = myApp.picker({
+                input: '#ks-picker-describe',
+                rotateEffect: true,
+                cols: [
+                    {
+                        textAlign: 'left',
+                        values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
+                    },
+                    {
+                        values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
+                    },
+                ]
+            });
+
+            // Dependent values
+            var carVendors = {
+                Japanese: ['Honda', 'Lexus', 'Mazda', 'Nissan', 'Toyota'],
+                German: ['Audi', 'BMW', 'Mercedes', 'Volkswagen', 'Volvo'],
+                American: ['Cadillac', 'Chrysler', 'Dodge', 'Ford']
+            };
+            var pickerDependent = myApp.picker({
+                input: '#ks-picker-dependent',
+                rotateEffect: true,
+                formatValue: function (picker, values) {
+                    return values[1];
+                },
+                cols: [
+                    {
+                        textAlign: 'left',
+                        values: ['Japanese', 'German', 'American'],
+                        onChange: function (picker, country) {
+                            if (picker.cols[1].replaceValues) {
+                                picker.cols[1].replaceValues(carVendors[country]);
+                            }
+                        }
+                    },
+                    {
+                        values: carVendors.Japanese,
+                        width: 160,
+                    },
+                ]
+            });
+
+            // Custom Toolbar
+            var pickerCustomToolbar = myApp.picker({
+                input: '#ks-picker-custom-toolbar',
+                rotateEffect: true,
+                toolbarTemplate: '<div class="toolbar">' +
+                '<div class="toolbar-inner">' +
+                '<div class="left">' +
+                '<a href="#" class="link toolbar-randomize-link">Randomize</a>' +
+                '</div>' +
+                '<div class="right">' +
+                '<a href="#" class="link close-picker">That\'s me</a>' +
+                '</div>' +
+                '</div>' +
+                '</div>',
+                cols: [
+                    {
+                        values: ['Mr', 'Ms'],
+                    },
+                    {
+                        textAlign: 'left',
+                        values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
+                    },
+                    {
+                        values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
+                    }
+                ],
+                onOpen: function (picker) {
+                    picker.container.find('.toolbar-randomize-link').on('click', function () {
+                        var col0Values = picker.cols[0].values;
+                        var col0Random = col0Values[Math.floor(Math.random() * col0Values.length)];
+
+                        var col1Values = picker.cols[1].values;
+                        var col1Random = col1Values[Math.floor(Math.random() * col1Values.length)];
+
+                        var col2Values = picker.cols[2].values;
+                        var col2Random = col2Values[Math.floor(Math.random() * col2Values.length)];
+
+                        picker.setValue([col0Random, col1Random, col2Random]);
+                    });
+                }
+            });
+
+            // Inline date-time
+            var pickerInline = myApp.picker({
+                input: '#ks-picker-date',
+                container: '#ks-picker-date-container',
+                toolbar: false,
+                rotateEffect: true,
+                value: [today.getMonth(), today.getDate(), today.getFullYear(), today.getHours(), (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes())],
+                onChange: function (picker, values, displayValues) {
+                    var daysInMonth = new Date(picker.value[2], picker.value[0] * 1 + 1, 0).getDate();
+                    if (values[1] > daysInMonth) {
+                        picker.cols[1].setValue(daysInMonth);
+                    }
+                },
+                formatValue: function (p, values, displayValues) {
+                    return displayValues[0] + ' ' + values[1] + ', ' + values[2] + ' ' + values[3] + ':' + values[4];
+                },
+                cols: [
+                    // Months
+                    {
+                        values: ('0 1 2 3 4 5 6 7 8 9 10 11').split(' '),
+                        displayValues: ('January February March April May June July August September October November December').split(' '),
+                        textAlign: 'left'
+                    },
+                    // Days
+                    {
+                        values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+                    },
+                    // Years
+                    {
+                        values: (function () {
+                            var arr = [];
+                            for (var i = 1950; i <= 2030; i++) {
+                                arr.push(i);
+                            }
+                            return arr;
+                        })()
+                    },
+                    // Space divider
+                    {
+                        divider: true,
+                        content: '&nbsp;&nbsp;'
+                    },
+                    // Hours
+                    {
+                        values: (function () {
+                            var arr = [];
+                            for (var i = 0; i <= 23; i++) {
+                                arr.push(i);
+                            }
+                            return arr;
+                        })()
+                    },
+                    // Divider
+                    {
+                        divider: true,
+                        content: ':'
+                    },
+                    // Minutes
+                    {
+                        values: (function () {
+                            var arr = [];
+                            for (var i = 0; i <= 59; i++) {
+                                arr.push(i < 10 ? '0' + i : i);
+                            }
+                            return arr;
+                        })(),
+                    }
+                ]
+            });
+        });
+
+
+        /* ===== Progress Bars ===== */
+
+        $$('.ks-demo-progressbar-inline .button').on('click', function () {
+            var progress = $$(this).attr('data-progress');
+            var progressbar = $$('.ks-demo-progressbar-inline .progressbar');
+            myApp.setProgressbar(progressbar, progress);
+        });
+        $$('.ks-demo-progressbar-load-hide .button').on('click', function () {
+            var container = $$('.ks-demo-progressbar-load-hide p:first-child');
+            if (container.children('.progressbar').length) return; //don't run all this if there is a current progressbar loading
+
+            myApp.showProgressbar(container, 0);
+
+            // Simluate Loading Something
+            var progress = 0;
+
+            function simulateLoading() {
+                setTimeout(function () {
+                    var progressBefore = progress;
+                    progress += Math.random() * 20;
+                    myApp.setProgressbar(container, progress);
+                    if (progressBefore < 100) {
+                        simulateLoading(); //keep "loading"
+                    }
+                    else myApp.hideProgressbar(container); //hide
+                }, Math.random() * 200 + 200);
+            }
+
+            simulateLoading();
+        });
+        $$('.ks-demo-progressbar-overlay .button').on('click', function () {
+            // Add Directly To Body
+            var container = $$('body');
+            if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
+
+            myApp.showProgressbar(container, 0, 'yellow');
+
+            // Simluate Loading Something
+            var progress = 0;
+
+            function simulateLoading() {
+                setTimeout(function () {
+                    var progressBefore = progress;
+                    progress += Math.random() * 20;
+                    myApp.setProgressbar(container, progress);
+                    if (progressBefore < 100) {
+                        simulateLoading(); //keep "loading"
+                    }
+                    else myApp.hideProgressbar(container); //hide
+                }, Math.random() * 200 + 200);
+            }
+
+            simulateLoading();
+        });
+        $$('.ks-demo-progressbar-infinite-overlay .button').on('click', function () {
+            var container = $$('body');
+            if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
+            myApp.showProgressbar(container, 'yellow');
+            setTimeout(function () {
+                myApp.hideProgressbar();
+            }, 5000);
+        });
+        $$('.ks-demo-progressbar-infinite-multi-overlay .button').on('click', function () {
+            var container = $$('body');
+            if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
+            myApp.showProgressbar(container, 'multi');
+            setTimeout(function () {
+                myApp.hideProgressbar();
+            }, 5000);
+        });
+
+        /* ===== Autocomplete ===== */
+
+        // Fruits data demo array
+        var fruits = ('Apple Apricot Avocado Banana Melon Orange Peach Pear Pineapple').split(' ');
+
+        // Simple Dropdown
+        var autocompleteDropdownSimple = myApp.autocomplete({
+            input: '#autocomplete-dropdown',
+            openIn: 'dropdown',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with all values
+        var autocompleteDropdownAll = myApp.autocomplete({
+            input: '#autocomplete-dropdown-all',
+            openIn: 'dropdown',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with placeholder
+        var autocompleteDropdownPlaceholder = myApp.autocomplete({
+            input: '#autocomplete-dropdown-placeholder',
+            openIn: 'dropdown',
+            dropdownPlaceholderText: 'Try to type "Apple"',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            }
+        });
+
+        // Dropdown with ajax data
+        var autocompleteDropdownAjax = myApp.autocomplete({
+            input: '#autocomplete-dropdown-ajax',
+            openIn: 'dropdown',
+            preloader: true, //enable preloader
+            valueProperty: 'id', //object's "value" property name
+            textProperty: 'name', //object's "text" property name
+            limit: 20, //limit to 20 results
+            dropdownPlaceholderText: 'Try "JavaScript"',
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Show Preloader
+                autocomplete.showPreloader();
+                // Do Ajax request to Autocomplete data
+                $$.ajax({
+                    url: 'js/autocomplete-languages.json',
+                    method: 'GET',
+                    dataType: 'json',
+                    //send "query" to server. Useful in case you generate response dynamically
+                    data: {
+                        query: query
+                    },
+                    success: function (data) {
+                        // Find matched items
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].name.toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(data[i]);
+                        }
+                        // Hide Preoloader
+                        autocomplete.hidePreloader();
+                        // Render items by passing array with result items
+                        render(results);
+                    }
+                });
+            }
+        });
+
+        // Simple Standalone
+        var autocompleteStandaloneSimple = myApp.autocomplete({
+            openIn: 'page', //open in page
+            opener: $$('#autocomplete-standalone'), //link that opens autocomplete
+            backOnSelect: true, //go back after we select something
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            },
+            onChange: function (autocomplete, value) {
+                // Add item text value to item-after
+                $$('#autocomplete-standalone').find('.item-after').text(value[0]);
+                // Add item value to input value
+                $$('#autocomplete-standalone').find('input').val(value[0]);
+            }
+        });
+
+        // Standalone Popup
+        var autocompleteStandalonePopup = myApp.autocomplete({
+            openIn: 'popup', //open in page
+            opener: $$('#autocomplete-standalone-popup'), //link that opens autocomplete
+            backOnSelect: true, //go back after we select something
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            },
+            onChange: function (autocomplete, value) {
+                // Add item text value to item-after
+                $$('#autocomplete-standalone-popup').find('.item-after').text(value[0]);
+                // Add item value to input value
+                $$('#autocomplete-standalone-popup').find('input').val(value[0]);
+            }
+        });
+
+        // Multiple Standalone
+        var autocompleteStandaloneMultiple = myApp.autocomplete({
+            openIn: 'page', //open in page
+            opener: $$('#autocomplete-standalone-multiple'), //link that opens autocomplete
+            multiple: true, //allow multiple values
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                    if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+            },
+            onChange: function (autocomplete, value) {
+                // Add item text value to item-after
+                $$('#autocomplete-standalone-multiple').find('.item-after').text(value.join(', '));
+                // Add item value to input value
+                $$('#autocomplete-standalone-multiple').find('input').val(value.join(', '));
+            }
+        });
+
+        // Standalone With Ajax
+        var autocompleteStandaloneAjax = myApp.autocomplete({
+            openIn: 'page', //open in page
+            opener: $$('#autocomplete-standalone-ajax'), //link that opens autocomplete
+            multiple: true, //allow multiple values
+            valueProperty: 'id', //object's "value" property name
+            textProperty: 'name', //object's "text" property name
+            limit: 50,
+            preloader: true, //enable preloader
+            preloaderColor: 'white', //preloader color
+            source: function (autocomplete, query, render) {
+                var results = [];
+                if (query.length === 0) {
+                    render(results);
+                    return;
+                }
+                // Show Preloader
+                autocomplete.showPreloader();
+                // Do Ajax request to Autocomplete data
+                $$.ajax({
+                    url: 'js/autocomplete-languages.json',
+                    method: 'GET',
+                    dataType: 'json',
+                    //send "query" to server. Useful in case you generate response dynamically
+                    data: {
+                        query: query
+                    },
+                    success: function (data) {
+                        // Find matched items
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].name.toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(data[i]);
+                        }
+                        // Hide Preoloader
+                        autocomplete.hidePreloader();
+                        // Render items by passing array with result items
+                        render(results);
+                    }
+                });
+            },
+            onChange: function (autocomplete, value) {
+                var itemText = [],
+                        inputValue = [];
+                for (var i = 0; i < value.length; i++) {
+                    itemText.push(value[i].name);
+                    inputValue.push(value[i].id);
+                }
+                // Add item text value to item-after
+                $$('#autocomplete-standalone-ajax').find('.item-after').text(itemText.join(', '));
+                // Add item value to input value
+                $$('#autocomplete-standalone-ajax').find('input').val(inputValue.join(', '));
+            }
+        });
+
+    }
+    release_to_ios();
+</script>
+</body>
+</html>
